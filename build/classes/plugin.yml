@@ -1,0 +1,33 @@
+name: Points
+main: com.pvminecraft.Points.Points
+version: 0.1
+
+commands:
+    home:
+        description: Go to your home point
+        usage: /home
+    sethome:
+        description: Sets your home point to your current location
+        usage: /sethome
+    spawn:
+        description: Teleports you to the spawn point
+        usage: /spawn
+    warp:
+        description: Used to operate on warps
+        usage: /warp <operation> <name>
+permissions:
+    points.*:
+        description: Gives access to all Points functions
+        children:
+                points.spawn: true
+                points.home: true
+                points.warp: true
+        points.spawn:
+            description: Grants the ability to teleport to spawn
+            default: true
+        points.home:
+            description: Gives the ability to set and use your home point
+            default: true
+        points.warp:
+            description: Gives the ability to use warps
+            default: op
