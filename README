@@ -29,4 +29,7 @@ Dependencies
 ------------
 
 Points depends on FlatDB, which is a flatfile database API. It can be
-obtained here: <filler>
+obtained here: http://www.github.com/s0lder/FlatDB
+
+Place the jar for FlatDB in the lib folder in your Bukkit server, as well
+as in your classpath of you intend to build Points.
