@@ -45,6 +45,7 @@ public class Warps {
     }
     
     public void unloadPlayer(String name) {
+        saveAll();
         if(warps.containsKey(name)) {
             warps.remove(name);
         }
@@ -67,6 +68,10 @@ public class Warps {
         }
         else if(operation.equalsIgnoreCase("go")) {
             FlatDB pWarp = warps.get(player.getName());
+            if(pWarp == null) {
+                loadPlayer(player.getName());
+                pWarp = warps.get(player.getName());
+            }
             Row pLoc = pWarp.getRow(name);
             if(pLoc == null) {
                 player.sendMessage(ChatColor.RED + "You don't have a warp by that name!");
