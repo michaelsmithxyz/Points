@@ -3,9 +3,12 @@ package com.pvminecraft.Points;
 import com.pvminecraft.FlatDB.FlatDB;
 import com.pvminecraft.FlatDB.Row;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -33,7 +36,8 @@ public class Warps {
         if(warps.containsKey(name)) {
             return;
         } else {
-            FlatDB db = new FlatDB(dataDir + File.separator + name, name + ".db");
+            FlatDB db;
+            db = new FlatDB(dataDir + File.separator + name, name + ".db");
             warps.put(name, db);
         }
     }

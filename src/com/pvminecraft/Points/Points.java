@@ -80,7 +80,7 @@ public class Points extends JavaPlugin {
 
         else if(command.getName().equalsIgnoreCase("spawn")) {
             if(player.hasPermission("points.spawn")) {
-                player.teleport(player.getLocation().getWorld().getSpawnLocation());
+                teleportTo(player, player.getLocation().getWorld().getSpawnLocation());
             } else
                 player.sendMessage(ChatColor.RED + "You don't have permission to do that!");
             return true;
@@ -94,7 +94,16 @@ public class Points extends JavaPlugin {
         }
         return false;
     }
-
+        
+    public void teleportTo(Player p, Location loc) {
+        if(loc.getBlock().getTypeId() != 0) {
+            Location locN = new Location(loc.getWorld(), loc.getX(), loc.getY() + 1, loc.getZ());
+            teleportTo(p, locN);
+        } else {
+            p.teleport(loc);
+        }
+    }
+    
     public Location toLocation(String x, String y, String z, 
                                String yaw, String pitch, String worldName ) {
         World world = getServer().getWorld(worldName);

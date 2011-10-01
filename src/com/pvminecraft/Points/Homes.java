@@ -6,6 +6,7 @@ package com.pvminecraft.Points;
 
 import com.pvminecraft.FlatDB.FlatDB;
 import com.pvminecraft.FlatDB.Row;
+import java.io.IOException;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -38,6 +39,7 @@ public class Homes {
             player.teleport(home);
         }
     }
+
     
     public void setHome(Player player) {
         Location home = player.getLocation();
