@@ -6,7 +6,6 @@ package com.pvminecraft.Points;
 
 import com.pvminecraft.FlatDB.FlatDB;
 import com.pvminecraft.FlatDB.Row;
-import java.io.IOException;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -50,7 +49,7 @@ public class Homes {
         newHome.addElement("yaw", String.valueOf(home.getYaw()));
         newHome.addElement("pitch", String.valueOf(home.getPitch()));
         newHome.addElement("world", home.getWorld().getName());
-        database.addRow(player.getName(), newHome);
+        database.addRow(newHome);
         player.sendMessage(ChatColor.GREEN + "Your home has been set!");
     }
     

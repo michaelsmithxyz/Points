@@ -3,12 +3,9 @@ package com.pvminecraft.Points;
 import com.pvminecraft.FlatDB.FlatDB;
 import com.pvminecraft.FlatDB.Row;
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -112,7 +109,7 @@ public class Warps {
         row.addElement("yaw", String.valueOf(loc.getYaw()));
         row.addElement("pitch", String.valueOf(loc.getPitch()));
         row.addElement("world", loc.getWorld().getName());
-        data.addRow(name, row);
+        data.addRow(row);
     }
     
     public void saveAll() {

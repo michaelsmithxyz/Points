@@ -1,6 +1,5 @@
 package com.pvminecraft.Points;
 
-import com.pvminecraft.FlatDB.*;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Location;
 import org.bukkit.World;
