@@ -1,5 +1,7 @@
 package com.pvminecraft.Points;
 
+import com.pvminecraft.Points.commands.Warps;
+import com.pvminecraft.Points.commands.Homes;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -34,6 +36,7 @@ public class Points extends JavaPlugin {
         dir.mkdirs();
         homes = new Homes(dir.getPath(), this);
         warps = new Warps(dir.getPath(), this);
+        
         //Loads all currently online players
         //This addresses a NullPointerException caused when the server is reloaded
         //And online players aren't loaded because they never triggered a join event
@@ -49,6 +52,9 @@ public class Points extends JavaPlugin {
         final PluginManager pm = getServer().getPluginManager();
         pm.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
         pm.registerEvent(Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
+        getCommand("home").setExecutor(homes);
+        getCommand("sethome").setExecutor(homes);
+        getCommand("warp").setExecutor(warps);
         
         System.out.println("[" + info.getName() + "] Enabled.");
     }
@@ -60,36 +66,12 @@ public class Points extends JavaPlugin {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player player = (Player)sender;
-        
-        if(command.getName().equalsIgnoreCase("home")) {
-            if(player.hasPermission("points.home")) {
-                homes.doHome(player);                
-            } else
-                player.sendMessage(ChatColor.RED + "You don't have permission to do that!");
-            return true;
-        }
-        
-        else if(command.getName().equalsIgnoreCase("sethome")) {
-            if(player.hasPermission("points.home")) {
-                homes.setHome(player);
-            } else
-                player.sendMessage(ChatColor.RED + "You don't have permission to do that!");
-            return true;
-        }
-
-        else if(command.getName().equalsIgnoreCase("spawn")) {
+        if(command.getName().equalsIgnoreCase("spawn")) {
             if(player.hasPermission("points.spawn")) {
                 teleportTo(player, player.getLocation().getWorld().getSpawnLocation());
             } else
                 player.sendMessage(ChatColor.RED + "You don't have permission to do that!");
             return true;
-        }
-        
-        else if(command.getName().equalsIgnoreCase("warp")) {
-            if(player.hasPermission("points.warp")) {
-                return warps.doCommand(sender, command, args);
-            } else
-                player.sendMessage(ChatColor.RED + "You don't have permission to do that!");
         }
         return false;
     }
