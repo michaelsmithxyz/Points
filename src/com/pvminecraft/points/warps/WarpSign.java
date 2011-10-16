@@ -4,7 +4,12 @@
  */
 package com.pvminecraft.points.warps;
 
+import com.pvminecraft.FlatDB.Row;
+import com.pvminecraft.points.utils.Locations;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  *
@@ -13,10 +18,25 @@ import org.bukkit.block.Sign;
 public class WarpSign {
     private Sign sign;
     private Warp target;
+    private Location location;
     
-    public WarpSign(Sign block, Warp warp) {
+    public WarpSign(Sign block, Warp warp, Location loc) {
         sign = block;
         target = warp;
+        location = loc;
+    }
+    
+    public static WarpSign fromRow(Row row, JavaPlugin pl, WarpManager wm) {
+        Location loc = Locations.fromRow(row, pl);
+        Block bl = loc.getBlock();
+        if(!(bl.getState() instanceof Sign))
+            return null;
+        Sign sign = (Sign) bl.getState();
+        String wName = row.getElement("warp");
+        Warp warp = wm.getWarp(wName.split(";")[0], wName.split(";")[1]);
+        if(warp == null)
+            return null;
+        return new WarpSign(sign, warp, loc);
     }
     
     public Sign getSign() {
@@ -25,5 +45,9 @@ public class WarpSign {
     
     public Warp getTarget() {
         return target;
+    }
+    
+    public Location getLocation() {
+        return location;
     }
 }
