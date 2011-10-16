@@ -1,6 +1,6 @@
 name: Points
-main: com.pvminecraft.Points.Points
-version: 0.2
+main: com.pvminecraft.points.Points
+version: 1.0
 
 commands:
     home:
@@ -13,8 +13,8 @@ commands:
         description: Teleports you to the spawn point
         usage: /spawn
     warp:
-        description: Used to operate on warps
-        usage: /warp <operation> <name>
+        description: Allows warp functionality
+        usage: /warp [operation] [target]
 permissions:
     points.*:
         description: Gives access to all Points functions
@@ -30,4 +30,4 @@ permissions:
             default: true
         points.warp:
             description: Gives the ability to use warps
-            default: op
+            default: true
