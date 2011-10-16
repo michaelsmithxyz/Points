@@ -1,0 +1,36 @@
+Points
+
+Points is a Bukkit Minecraft server plugin that provides /home, /spawn, and
+warp points functionality for users.
+
+Commands
+--------
+
+/home -- Teleport to your home point, if set
+/sethome -- Sets your home point to your current location
+/spawn -- Teleports you to the spawn point for the current world
+/warp -- The command through which you manipulate warps
+
+Permissions
+-----------
+
+Points is written to the built-in Bukkit permissions API (Superperms).
+It exports the following permissions nodes:
+
+points.spawn -- Access to the spawn command (default true)
+points.home -- Access to the home and sethome commands (default true)
+points.warp -- Access to the warps functionality (default op)
+
+Licensing
+---------
+
+See the file called LICENSE.
+
+Dependencies
+------------
+
+Points depends on FlatDB, which is a flatfile database API. It can be
+obtained here: http://www.github.com/s0lder/FlatDB
+
+Place the jar for FlatDB in the lib folder in your Bukkit server, as well
+as in your classpath of you intend to build Points.
