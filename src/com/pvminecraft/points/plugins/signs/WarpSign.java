@@ -2,10 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.pvminecraft.points.warps;
+package com.pvminecraft.points.plugins.signs;
 
 import com.pvminecraft.FlatDB.Row;
 import com.pvminecraft.points.utils.Locations;
+import com.pvminecraft.points.warps.Warp;
+import com.pvminecraft.points.warps.WarpManager;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;

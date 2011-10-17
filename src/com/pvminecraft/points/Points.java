@@ -6,16 +6,14 @@ package com.pvminecraft.points;
 
 import com.pvminecraft.points.commands.HomeCommand;
 import com.pvminecraft.points.commands.WarpCommand;
-import com.pvminecraft.points.listeners.PointsBlockListener;
-import com.pvminecraft.points.listeners.PointsPlayerListener;
+import com.pvminecraft.points.plugins.PointsPlugin;
+import com.pvminecraft.points.plugins.signs.WarpSignManager;
 import com.pvminecraft.points.warps.WarpManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -26,14 +24,13 @@ public class Points extends JavaPlugin {
     private HomeCommand homesManager;
     private WarpCommand warpCommand;
     private WarpManager warpManager;
-    private PointsPlayerListener playerListener;
-    private PointsBlockListener blockListener;
+    private PointsPlugin signPlugin;
     
     @Override
     public void onDisable() {
         homesManager.saveHomes();
         warpManager.savePlayers(getDataFolder().getPath());
-        warpManager.saveSigns(getDataFolder().getPath());
+        signPlugin.disable();
     }
 
     @Override
@@ -41,17 +38,16 @@ public class Points extends JavaPlugin {
         homesManager = new HomeCommand(this);
         warpManager = new WarpManager(this);
         warpCommand = new WarpCommand(this);
-        playerListener = new PointsPlayerListener(this, warpManager);
-        blockListener = new PointsBlockListener(this, warpManager);
+        signPlugin = new WarpSignManager(this);
+        
         homesManager.loadHomes();
         warpManager.loadWarps(getDataFolder().getPath());
-        warpManager.loadSigns(getDataFolder().getPath());
+        
         getCommand("home").setExecutor(homesManager);
         getCommand("sethome").setExecutor(homesManager);
         getCommand("warp").setExecutor(warpCommand);
-        getServer().getPluginManager().registerEvent(Type.BLOCK_BREAK, blockListener, Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Type.SIGN_CHANGE, blockListener, Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
+        
+        signPlugin.enable();
         System.out.println("[Points] Points is now active.");
     }
     

@@ -4,6 +4,7 @@
  */
 package com.pvminecraft.points.warps;
 
+import com.pvminecraft.points.plugins.signs.WarpSign;
 import com.pvminecraft.FlatDB.FlatDB;
 import com.pvminecraft.FlatDB.Row;
 import com.pvminecraft.points.Points;
@@ -24,12 +25,10 @@ import org.bukkit.entity.Player;
 public class WarpManager {
     private Points plugin;
     private HashMap<String, List<Warp>> warps;
-    private HashMap<Location, WarpSign> signs;
     private FlatDB players;
     
     public WarpManager(Points pl) {
         warps = new HashMap<String, List<Warp>>();
-        signs = new HashMap<Location, WarpSign>();
         plugin = pl;
     }
     
@@ -43,17 +42,6 @@ public class WarpManager {
         }
     }
     
-    public void loadSigns(String dir) {
-        FlatDB signDb = new FlatDB(dir, "signs.db");
-        List<Row> rows = signDb.getAll();
-        for(Row r : rows) {
-            WarpSign sign = WarpSign.fromRow(r, plugin, this);
-            if(sign == null)
-                continue;
-            signs.put(sign.getLocation(), sign);
-        }
-    }
-    
     public void loadPlayer(String name, String dir, String db) {
         List<Warp> playerList = new ArrayList<Warp>();
         FlatDB database = new FlatDB(dir, db);
@@ -64,22 +52,6 @@ public class WarpManager {
             playerList.add(w);
         }
         warps.put(name, playerList);
-    }
-    
-    public void saveSigns(String dir) {
-        FlatDB db = new FlatDB(dir, "signs.db");
-        db.removeAll();
-        Iterator it = signs.entrySet().iterator();
-        while(it.hasNext()) {
-            Map.Entry pairs = (Map.Entry)it.next();
-            WarpSign sign = (WarpSign) pairs.getValue();
-            Warp target = sign.getTarget();
-            String w = target.getOwner() + ";" + target.getName();
-            Row row = Locations.locToRow(sign.getLocation(), String.valueOf(sign.hashCode()));
-            row.addElement("warp", w);
-            db.addRow(row);
-            db.update();
-        }
     }
     
     public void savePlayers(String dir) {
@@ -158,19 +130,5 @@ public class WarpManager {
             return false;
         pl.teleport(target.getTarget());
         return true;
-    }
-
-    public void addSign(WarpSign ws) {
-        signs.put(ws.getLocation(), ws);
-    }
-
-    public void removeSign(Location loc) {
-        if(signs.containsKey(loc))
-            signs.remove(loc);
-    }
-
-    public WarpSign getSign(Sign sg) {
-        Location loc = sg.getBlock().getLocation();
-        return signs.get(loc);
     }
 }
