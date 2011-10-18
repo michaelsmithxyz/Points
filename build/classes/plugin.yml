@@ -1,6 +1,6 @@
 name: Points
 main: com.pvminecraft.points.Points
-version: 1.1
+version: 1.2
 
 commands:
     home:
@@ -15,6 +15,7 @@ commands:
     warp:
         description: Allows warp functionality
         usage: /warp [operation] [target]
+
 permissions:
     points.*:
         description: Gives access to all Points functions

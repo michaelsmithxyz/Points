@@ -46,7 +46,7 @@ public class Points extends JavaPlugin {
         getCommand("home").setExecutor(homesManager);
         getCommand("sethome").setExecutor(homesManager);
         getCommand("warp").setExecutor(warpCommand);
-        
+
         signPlugin.enable();
         System.out.println("[Points] Points is now active.");
     }
