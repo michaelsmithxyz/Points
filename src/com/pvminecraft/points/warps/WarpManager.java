@@ -21,7 +21,6 @@ import org.bukkit.entity.Player;
 public class WarpManager {
     private Points plugin;
     private HashMap<String, List<Warp>> warps;
-    private FlatDB players;
     
     public WarpManager(Points pl) {
         warps = new HashMap<String, List<Warp>>();
@@ -29,7 +28,7 @@ public class WarpManager {
     }
     
     public void loadWarps(String dir) {
-        players = new FlatDB(dir, "players.db");
+        FlatDB players = new FlatDB(dir, "players.db");
         List<Row> playerRows =  players.getAll();
         for(Row r : playerRows) {
             String name = r.getIndex();
