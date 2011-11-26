@@ -92,6 +92,16 @@ public class WarpCommand implements CommandExecutor {
                     w.setVisible(true);
                 }
                 return true;
+            } else if(action.equalsIgnoreCase("find")) {
+                Warp w = manager.getWarp(player, target);
+                if(w == null) {
+                    player.sendMessage(ChatColor.RED + "You dont have a warp named " +
+                            ChatColor.YELLOW + target);
+                } else {
+                    player.setCompassTarget(w.getTarget());
+                    player.sendMessage(ChatColor.GREEN + "Your compass is now pointing toward the warp");
+                }
+                return true;
             }
         } else {
             Player player = (Player) cs;
@@ -109,6 +119,5 @@ public class WarpCommand implements CommandExecutor {
             }
         }
         return false;
-    }
-    
+    }    
 }

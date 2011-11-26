@@ -41,9 +41,9 @@ public class WarpManager {
         List<Warp> playerList = new ArrayList<Warp>();
         FlatDB database = new FlatDB(dir, db);
         List<Row> rows = database.getAll();
+        System.out.println("[Points] Loading Player: " + name);
         for(Row r : rows) {
             Warp w = Warp.fromRow(r, plugin, name);
-            System.out.println("Loading: " + name + "/" + w.getName());
             playerList.add(w);
         }
         warps.put(name, playerList);

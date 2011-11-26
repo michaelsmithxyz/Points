@@ -40,6 +40,8 @@ public class SignBlockListener extends BlockListener {
     public void onBlockBreak(BlockBreakEvent event) {
         if(event.getBlock().getState() instanceof Sign) {
             Location loc = event.getBlock().getLocation();
+            if(sMgr.getSign((Sign) event.getBlock().getState()) == null)
+                    return;
             sMgr.removeSign(loc);
             event.getPlayer().sendMessage(ChatColor.YELLOW + "You've broken a warp sign!");
         }
