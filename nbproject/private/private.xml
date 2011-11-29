@@ -1,15 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
-    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
-        <file>file:/home/michael/Projects/Points/src/com/pvminecraft/points/Points.java</file>
-        <file>file:/home/michael/Projects/Points/src/com/pvminecraft/points/plugins/signs/WarpSign.java</file>
-        <file>file:/home/michael/Projects/Points/src/com/pvminecraft/points/warps/WarpManager.java</file>
-        <file>file:/home/michael/Projects/Points/src/com/pvminecraft/points/plugins/signs/SignBlockListener.java</file>
-        <file>file:/home/michael/Projects/Points/src/com/pvminecraft/points/plugins/signs/SignPlayerListener.java</file>
-        <file>file:/home/michael/Projects/Points/src/com/pvminecraft/points/commands/WarpCommand.java</file>
-        <file>file:/home/michael/Projects/Points/src/com/pvminecraft/points/plugins/signs/WarpSignManager.java</file>
-        <file>file:/home/michael/Projects/Points/src/com/pvminecraft/points/plugins/PointsPlugin.java</file>
-        <file>file:/home/michael/Projects/Points/src/plugin.yml</file>
-    </open-files>
 </project-private>

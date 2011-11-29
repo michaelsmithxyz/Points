@@ -43,7 +43,13 @@ public class WarpManager {
         List<Row> rows = database.getAll();
         System.out.println("[Points] Loading Player: " + name);
         for(Row r : rows) {
-            Warp w = Warp.fromRow(r, plugin, name);
+            Warp w = null;
+            try {
+                w = Warp.fromRow(r, plugin, name);
+            } catch(NullPointerException e) {
+                System.err.println("Error Loading Warp " + name + "/" + r.getIndex());
+                continue;
+            }
             playerList.add(w);
         }
         warps.put(name, playerList);
