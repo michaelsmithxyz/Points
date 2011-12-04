@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.pvminecraft.points.commands;
 
 import com.pvminecraft.FlatDB.FlatDB;
@@ -44,11 +40,14 @@ public class HomeCommand implements CommandExecutor {
         if("sethome".equals(label)) {
             Location currLoc = pl.getLocation();
             homes.put(pl.getName(), currLoc);
-            pl.sendMessage(ChatColor.GREEN + "Your home point has been set!");
+            pl.sendMessage(ChatColor.GREEN + "Your home point has been at " +
+                       ChatColor.BLUE + (int)currLoc.getX() +
+                        ", " + (int)currLoc.getY() + ", " + (int)currLoc.getZ());
             return true;
         } else {
             if(homes.containsKey(pl.getName())) {
                 sendHome(pl);
+                pl.sendMessage(ChatColor.GREEN + "Welcome home!");
                 return true;
             } else {
                 pl.sendMessage(ChatColor.RED + "You need to set your home point first!");

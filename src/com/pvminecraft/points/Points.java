@@ -1,10 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.pvminecraft.points;
 
 import com.pvminecraft.points.commands.HomeCommand;
+import com.pvminecraft.points.commands.PointsCommand;
 import com.pvminecraft.points.commands.WarpCommand;
 import com.pvminecraft.points.plugins.PointsPlugin;
 import com.pvminecraft.points.plugins.signs.WarpSignManager;
@@ -24,6 +21,7 @@ public class Points extends JavaPlugin {
     private HomeCommand homesManager;
     private WarpCommand warpCommand;
     private WarpManager warpManager;
+    private PointsCommand pointsCommand;
     private PointsPlugin signPlugin;
     
     @Override
@@ -38,6 +36,7 @@ public class Points extends JavaPlugin {
         homesManager = new HomeCommand(this);
         warpManager = new WarpManager(this);
         warpCommand = new WarpCommand(this);
+        pointsCommand = new PointsCommand(this);
         signPlugin = new WarpSignManager(this);
         
         homesManager.loadHomes();
@@ -46,6 +45,7 @@ public class Points extends JavaPlugin {
         getCommand("home").setExecutor(homesManager);
         getCommand("sethome").setExecutor(homesManager);
         getCommand("warp").setExecutor(warpCommand);
+        getCommand("points").setExecutor(pointsCommand);
 
         signPlugin.enable();
         System.out.println("[Points] Points is now active.");
@@ -63,8 +63,17 @@ public class Points extends JavaPlugin {
                 player.sendMessage(ChatColor.RED + "You don't have permission to do that!");
                 return true;
             }
-            teleportTo(player, player.getLocation().getWorld().getSpawnLocation());
-            return true;
+            if(args.length < 0 && args[0].equalsIgnoreCase("bed")) {
+                Location bed = player.getBedSpawnLocation();
+                if(bed != null)
+                    teleportTo(player, bed);
+                else
+                    teleportTo(player, player.getLocation().getWorld().getSpawnLocation());
+                return true;
+            } else {
+                teleportTo(player, player.getLocation().getWorld().getSpawnLocation());
+                return true;
+            }
         }
         return false;
     }

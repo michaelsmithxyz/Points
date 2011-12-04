@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.pvminecraft.points.commands;
 
 import com.pvminecraft.points.Points;
@@ -51,6 +47,9 @@ public class WarpCommand implements CommandExecutor {
                     }
                 }
                 return true;
+            } else if(action.equalsIgnoreCase("?") || action.equalsIgnoreCase("help")) {
+                showHelp(player);
+                return true;
             }
         } else if(args.length == 2) {
             Player player = (Player) cs;
@@ -60,7 +59,9 @@ public class WarpCommand implements CommandExecutor {
                 Location loc = player.getLocation();
                 Warp warp = new Warp(loc, player.getName(), target);
                 manager.addWarp(player, warp);
-                player.sendMessage(ChatColor.GREEN + "Your warp has been created!");
+                player.sendMessage(ChatColor.GREEN + "Created " + ChatColor.YELLOW +
+                        target + ChatColor.GREEN + " at " + ChatColor.BLUE + (int)loc.getX() +
+                        ", " + (int)loc.getY() + ", " + (int)loc.getZ());
                 return true;
             } else if(action.equalsIgnoreCase("list")) {
                 List<Warp> plWarps = manager.getWarps(target);
@@ -83,6 +84,17 @@ public class WarpCommand implements CommandExecutor {
                     manager.sendTo(player, w);
                 }
                 return true;
+            } else if(action.equalsIgnoreCase("delete")) {
+                Warp w = manager.getWarp(player, target);
+                if(w == null) {
+                    player.sendMessage(ChatColor.RED + "You don't have a warp named " +
+                            ChatColor.YELLOW + target);
+                } else {
+                    manager.removeWarp(player, w);
+                    player.sendMessage(ChatColor.GREEN + "The warp " + ChatColor.YELLOW +
+                            target + ChatColor.GREEN + " has been deleted");
+                }
+                return true;
             } else if(action.equalsIgnoreCase("public")) {
                 Warp w = manager.getWarp(player, target);
                 if(w == null) {
@@ -102,6 +114,24 @@ public class WarpCommand implements CommandExecutor {
                     player.sendMessage(ChatColor.GREEN + "Your compass is now pointing toward the warp");
                 }
                 return true;
+            } else if(action.equalsIgnoreCase("info")) {
+                Warp w = manager.getWarp(pl, target);
+                if(w == null) {
+                    player.sendMessage(ChatColor.RED + "You don't have a warp named " +
+                            ChatColor.YELLOW + target);
+                } else {
+                    Location l = w.getTarget();
+                    player.sendMessage(ChatColor.YELLOW + "Warp info for " +
+                            ChatColor.BLUE + target + ChatColor.YELLOW + ":");
+                    player.sendMessage(ChatColor.GREEN + "  Location:");
+                    player.sendMessage(ChatColor.BLUE + "    X: " + (int)l.getX());
+                    player.sendMessage(ChatColor.BLUE + "    Y: " + (int)l.getY());
+                    player.sendMessage(ChatColor.BLUE + "    Z: " + (int)l.getZ());
+                    player.sendMessage(ChatColor.BLUE + "    World: " + l.getWorld().getName());
+                    player.sendMessage(ChatColor.GREEN + "  Visibility: " +
+                        ChatColor.BLUE + (w.getVisible()?"public":"private"));
+                }
+                return true;
             }
         } else {
             Player player = (Player) cs;
@@ -118,6 +148,32 @@ public class WarpCommand implements CommandExecutor {
                 return true;
             }
         }
-        return false;
-    }    
+        showHelp(pl);
+        return true;
+    }
+
+    public void showHelp(Player pl) {
+        pl.sendMessage(ChatColor.YELLOW + "Help for /warp:");
+        pl.sendMessage(ChatColor.GREEN + "/warp list " + ChatColor.WHITE +
+                 " - " + ChatColor.BLUE + "List all of your warps");
+        pl.sendMessage(ChatColor.GREEN + "/warp ? " + ChatColor.WHITE +
+                 " - " + ChatColor.BLUE + "Show this help screen");
+        pl.sendMessage(ChatColor.GREEN + "/warp new [name] " + ChatColor.WHITE +
+                 " - " + ChatColor.BLUE + "Create a new warp with the given name");
+        pl.sendMessage(ChatColor.GREEN + "/warp delete [name] " + ChatColor.WHITE +
+                 " - " + ChatColor.BLUE + "Delete the warp with the given name");
+        pl.sendMessage(ChatColor.GREEN + "/warp go [name] " + ChatColor.WHITE +
+                 " - " + ChatColor.BLUE + "Go to the warp with the given name");
+        pl.sendMessage(ChatColor.GREEN + "/warp public [name] " + ChatColor.WHITE +
+                 " - " + ChatColor.BLUE + "Make the given warp public");
+        pl.sendMessage(ChatColor.GREEN + "/warp find [name] " + ChatColor.WHITE +
+                 " - " + ChatColor.BLUE + "Point your compass to the given warp");
+        pl.sendMessage(ChatColor.GREEN + "/warp list [player] " + ChatColor.WHITE +
+                 " - " + ChatColor.BLUE + "List the given player's warps");
+        pl.sendMessage(ChatColor.GREEN + "/warp info [name] " + ChatColor.WHITE +
+                 " - " + ChatColor.BLUE + "Show information about a warp");
+        pl.sendMessage(ChatColor.GREEN + "/warp go [player] [name] " + ChatColor.WHITE +
+                 " - " + ChatColor.BLUE + "Go to the given player's warp");
+        
+    }
 }

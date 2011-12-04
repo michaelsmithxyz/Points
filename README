@@ -10,6 +10,7 @@ Commands
 /sethome -- Sets your home point to your current location
 /spawn -- Teleports you to the spawn point for the current world
 /warp -- The command through which you manipulate warps
+/points -- Admin informational functions
 
 Permissions
 -----------
@@ -19,7 +20,8 @@ It exports the following permissions nodes:
 
 points.spawn -- Access to the spawn command (default true)
 points.home -- Access to the home and sethome commands (default true)
-points.warp -- Access to the warps functionality (default op)
+points.warp -- Access to the warps functionality (default true)
+points.admin -- Access to admin functionality in /points (default op)
 
 Licensing
 ---------
@@ -33,4 +35,4 @@ Points depends on FlatDB, which is a flatfile database API. It can be
 obtained here: http://www.github.com/s0lder/FlatDB
 
 Place the jar for FlatDB in the lib folder in your Bukkit server, as well
-as in your classpath of you intend to build Points.
+as in your classpath if you intend to build Points.
