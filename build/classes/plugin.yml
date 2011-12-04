@@ -1,6 +1,6 @@
 name: Points
 main: com.pvminecraft.points.Points
-version: 1.5
+version: 1.5.1
 
 commands:
     home:

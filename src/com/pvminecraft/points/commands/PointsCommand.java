@@ -24,12 +24,16 @@ public class PointsCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender cs, Command cmnd, String label, String[] args) {
+        if(!cs.hasPermission("points.admin")) {
+            cs.sendMessage(ChatColor.RED + "You don't have permission to to that!");
+            return true;
+        }
         if(args.length == 1) {
             if(args[0].equalsIgnoreCase("about")) {
                 cs.sendMessage(ChatColor.BLUE + "Points " + ChatColor.WHITE + "version " +
                         ChatColor.GREEN + plugin.getDescription().getVersion());
                 cs.sendMessage("Copyright 2011 " + ChatColor.GREEN + "s0lder (Michael Smith)");
-                cs.sendMessage("Licensed under the " + ChatColor.GREEN + "GNU GPL");
+                cs.sendMessage("Licensed under the " + ChatColor.GREEN + "MIT LICENSE");
                 return true;
             } else if(args[0].equalsIgnoreCase("players")) {
                 HashMap<String, List<Warp>> map = plugin.getWarpManager().getWarpTable();

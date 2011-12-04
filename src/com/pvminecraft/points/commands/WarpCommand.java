@@ -50,7 +50,8 @@ public class WarpCommand implements CommandExecutor {
             } else if(action.equalsIgnoreCase("?") || action.equalsIgnoreCase("help")) {
                 showHelp(player);
                 return true;
-            }
+            } else if(action.equalsIgnoreCase("find"))
+                player.setCompassTarget(player.getLocation().getWorld().getSpawnLocation());
         } else if(args.length == 2) {
             Player player = (Player) cs;
             String action = args[0];
