@@ -139,7 +139,13 @@ public class WarpManager {
             }
             warpsDB.addRow(warpRow);
         }
+        warpsDB.update();
+        cleanWarps(name, warpsDB);
+    }
+
+    private void cleanWarps(String name, FlatDB warpsDB) {
         // Remove deleted warps from the database
+        List<Warp> plWarps = warps.get(name);
         List<String> warpNames = new ArrayList<String>();
         for(Warp warp : plWarps)
             warpNames.add(warp.getName());
