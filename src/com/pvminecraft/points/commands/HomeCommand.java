@@ -1,5 +1,6 @@
 package com.pvminecraft.points.commands;
 
+import static com.pvminecraft.points.Points._;
 import com.pvminecraft.FlatDB.FlatDB;
 import com.pvminecraft.FlatDB.Row;
 import com.pvminecraft.points.Points;
@@ -8,7 +9,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -34,23 +34,23 @@ public class HomeCommand implements CommandExecutor {
     public boolean onCommand(CommandSender cs, Command cmnd, String label, String[] args) {
         Player pl = (Player) cs;
         if(!pl.hasPermission("points.home")) {
-            pl.sendMessage(ChatColor.RED + "You don't have permission to do that!");
+            pl.sendMessage(_("alertNoPerm"));
             return true;
         }
         if("sethome".equals(label)) {
             Location currLoc = pl.getLocation();
             homes.put(pl.getName(), currLoc);
-            pl.sendMessage(ChatColor.GREEN + "Your home point has been at " +
-                       ChatColor.BLUE + (int)currLoc.getX() +
-                        ", " + (int)currLoc.getY() + ", " + (int)currLoc.getZ());
+            pl.sendMessage(_("setHome", 
+                    new Object[] {(int)currLoc.getX(), (int)currLoc.getY(), (int)currLoc.getZ()}
+                    ));
             return true;
         } else {
             if(homes.containsKey(pl.getName())) {
                 sendHome(pl);
-                pl.sendMessage(ChatColor.GREEN + "Welcome home!");
+                pl.sendMessage(_("welcome"));
                 return true;
             } else {
-                pl.sendMessage(ChatColor.RED + "You need to set your home point first!");
+                pl.sendMessage(_("noHome"));
                 return true;
             }
         }

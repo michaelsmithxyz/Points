@@ -1,6 +1,7 @@
 package com.pvminecraft.points.commands;
 
 import com.pvminecraft.points.Points;
+import static com.pvminecraft.points.Points._;
 import com.pvminecraft.points.warps.Warp;
 import java.util.HashMap;
 import java.util.List;
@@ -25,27 +26,25 @@ public class PointsCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender cs, Command cmnd, String label, String[] args) {
         if(!cs.hasPermission("points.admin")) {
-            cs.sendMessage(ChatColor.RED + "You don't have permission to to that!");
+            cs.sendMessage(_("alertNoPerm"));
             return true;
         }
         if(args.length == 1) {
             if(args[0].equalsIgnoreCase("about")) {
-                cs.sendMessage(ChatColor.BLUE + "Points " + ChatColor.WHITE + "version " +
-                        ChatColor.GREEN + plugin.getDescription().getVersion());
-                cs.sendMessage("Copyright 2011 " + ChatColor.GREEN + "s0lder (Michael Smith)");
-                cs.sendMessage("Licensed under the " + ChatColor.GREEN + "MIT LICENSE");
+                cs.sendMessage(_("about", new Object[] {plugin.getDescription().getVersion()}));
+                cs.sendMessage(_("copyright"));
+                cs.sendMessage(_("license"));
                 return true;
             } else if(args[0].equalsIgnoreCase("players")) {
                 HashMap<String, List<Warp>> map = plugin.getWarpManager().getWarpTable();
                 Set<String> players = map.keySet();
                 if(players.size() < 1) {
-                    cs.sendMessage("No players currently have warps");
+                    cs.sendMessage(_("noPlayerWarps"));
                     return true;
                 }
-                cs.sendMessage("The following players have warps:");
+                cs.sendMessage(_("playersWarps"));
                 for(String player : players) {
-                    cs.sendMessage(" - " + ChatColor.GREEN + player + ChatColor.WHITE +
-                            " - " + ChatColor.BLUE + map.get(player).size());
+                    cs.sendMessage(_("warpNums", new Object[] {player, map.get(player).size()}));
                 }
                 return true;
             } else if(args[0].equalsIgnoreCase("?") || args[0].equalsIgnoreCase("help")) {

@@ -1,5 +1,6 @@
 package com.pvminecraft.points.commands;
 
+import static com.pvminecraft.points.Points._;
 import com.pvminecraft.points.Points;
 import com.pvminecraft.points.warps.Warp;
 import com.pvminecraft.points.warps.WarpManager;
@@ -17,43 +18,53 @@ import org.bukkit.entity.Player;
  */
 public class WarpCommand implements CommandExecutor {
     private Points plugin;
+    private WarpManager manager;
     
     public WarpCommand(Points ins) {
         plugin = ins;
+        manager = plugin.getWarpManager();
+    }
+
+    public boolean listWarps(Player player, Player reciever) {
+        List<Warp> plWarps = manager.getWarps(player);
+        if(player == reciever) {
+            if(plWarps == null)
+                reciever.sendMessage(_("youNoWarps"));
+            else {
+                reciever.sendMessage(_("warpList"));
+                for(Warp w : plWarps)
+                    reciever.sendMessage(_("warpItem", new Object[] {w.getName(), w.getVisible()}));
+            }
+        } else {
+            if(plWarps == null)
+                reciever.sendMessage(_("plNoWarps", new Object[] {player.getName()}));
+            else {
+                reciever.sendMessage(_("warpList"));
+                for(Warp w : plWarps)
+                    if(w.getVisible())
+                        reciever.sendMessage(_("warpItem", new Object[] {w.getName(), w.getVisible()}));
+            }
+        }
+        return true;
     }
     
     @Override
     public boolean onCommand(CommandSender cs, Command cmnd, String string, String[] args) {
-        WarpManager manager = plugin.getWarpManager();
-        Player pl = (Player) cs;
-        if(!pl.hasPermission("points.warp")) {
-            pl.sendMessage(ChatColor.RED + "You don't have permission to do that!");
+        Player player = (Player) cs;
+        if(!player.hasPermission("points.warp")) {
+            player.sendMessage(_("alertNoPerm"));
             return true;
         }
-        if(args.length < 1) {
-            return false;
-        } else if(args.length == 1) {
+        if(args.length == 1) {
             String action = args[0];
-            Player player = (Player) cs;
-            if("list".equals(action)) {
-                List<Warp> plWarps = manager.getWarps(player);
-                if(plWarps == null || plWarps.size() < 1) {
-                    player.sendMessage(ChatColor.RED + "You don't have any warps!");
-                } else {
-                    player.sendMessage(ChatColor.GREEN + "Your Warps:");
-                    for(Warp w : plWarps) {
-                        player.sendMessage(ChatColor.BLUE + "    " + w.getName() + ": " + 
-                                (w.getVisible()?"public":"private"));
-                    }
-                }
-                return true;
+            if(action.equals("list"))
+                return listWarps(player, player);
             } else if(action.equalsIgnoreCase("?") || action.equalsIgnoreCase("help")) {
                 showHelp(player);
                 return true;
             } else if(action.equalsIgnoreCase("find"))
                 player.setCompassTarget(player.getLocation().getWorld().getSpawnLocation());
         } else if(args.length == 2) {
-            Player player = (Player) cs;
             String action = args[0];
             String target = args[1];
             if(action.equalsIgnoreCase("new")) {
@@ -116,7 +127,7 @@ public class WarpCommand implements CommandExecutor {
                 }
                 return true;
             } else if(action.equalsIgnoreCase("info")) {
-                Warp w = manager.getWarp(pl, target);
+                Warp w = manager.getWarp(player, target);
                 if(w == null) {
                     player.sendMessage(ChatColor.RED + "You don't have a warp named " +
                             ChatColor.YELLOW + target);
@@ -134,8 +145,7 @@ public class WarpCommand implements CommandExecutor {
                 }
                 return true;
             }
-        } else {
-            Player player = (Player) cs;
+        } else if(args.length < 2) {
             String action = args[0];
             String target = args[1];
             String targetTwo = args[2];
@@ -149,7 +159,7 @@ public class WarpCommand implements CommandExecutor {
                 return true;
             }
         }
-        showHelp(pl);
+        showHelp(player);
         return true;
     }
 
