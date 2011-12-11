@@ -27,6 +27,10 @@ public class WarpCommand implements CommandExecutor {
 
     public boolean listWarps(Player player, Player reciever) {
         List<Warp> plWarps = manager.getWarps(player);
+        if(player == null) {
+            reciever.sendMessage(_("noPlayer", new Object[] {player.getName()}));
+            return true;
+        }
         if(player == reciever) {
             if(plWarps == null)
                 reciever.sendMessage(_("youNoWarps"));
@@ -47,6 +51,44 @@ public class WarpCommand implements CommandExecutor {
         }
         return true;
     }
+
+    public boolean newWarp(Player player, String target) {
+        Location loc = player.getLocation();
+        Warp warp = new Warp(loc, player.getName(), target);
+        manager.addWarp(player, warp);
+        player.sendMessage(_("warpCreate",
+                new Object[] {(int)loc.getX(), (int)loc.getY(), (int)loc.getZ()}
+                ));
+        return true;
+    }
+
+    public boolean goToWarp(Player player, Player target, String name) {
+        if(target == null) {
+            player.sendMessage(_("noPlayer", new Object[] {target.getName()}));
+            return true;
+        }
+        Warp w = manager.getWarp(target, name);
+        if(w == null) {
+            if(player == target)
+                player.sendMessage(_("noWarpName", new Object[]{name}));
+            else
+                player.sendMessage(_("plNoWarp", new Object[] {target.getName(), name}));
+        } else {
+            manager.sendTo(player, w);
+        }
+        return true;
+    }
+
+    public void showInfo(Warp w, Player player) {
+        Location l = w.getTarget();
+        player.sendMessage(_("warpInfo", new Object[]{w.getName()}));
+        player.sendMessage(_("location"));
+        player.sendMessage(_("x", new Object[]{(int)l.getX()}));
+        player.sendMessage(_("y", new Object[]{(int)l.getY()}));
+        player.sendMessage(_("z", new Object[]{(int)l.getZ()}));
+        player.sendMessage(_("world", new Object[]{l.getWorld().getName()}));
+        player.sendMessage(_("visibility", new Object[]{w.getVisible()?"public":"private"}));
+    }
     
     @Override
     public boolean onCommand(CommandSender cs, Command cmnd, String string, String[] args) {
@@ -55,106 +97,72 @@ public class WarpCommand implements CommandExecutor {
             player.sendMessage(_("alertNoPerm"));
             return true;
         }
+        // Commands of the form /command [arg]
         if(args.length == 1) {
             String action = args[0];
             if(action.equals("list"))
                 return listWarps(player, player);
-            } else if(action.equalsIgnoreCase("?") || action.equalsIgnoreCase("help")) {
+            else if(action.equalsIgnoreCase("?") || action.equalsIgnoreCase("help")) {
                 showHelp(player);
                 return true;
-            } else if(action.equalsIgnoreCase("find"))
+            } else if(action.equalsIgnoreCase("find")) {
                 player.setCompassTarget(player.getLocation().getWorld().getSpawnLocation());
+                return true;
+            }
+        //Commands of the form /command [arg] [arg]
         } else if(args.length == 2) {
             String action = args[0];
             String target = args[1];
-            if(action.equalsIgnoreCase("new")) {
-                Location loc = player.getLocation();
-                Warp warp = new Warp(loc, player.getName(), target);
-                manager.addWarp(player, warp);
-                player.sendMessage(ChatColor.GREEN + "Created " + ChatColor.YELLOW +
-                        target + ChatColor.GREEN + " at " + ChatColor.BLUE + (int)loc.getX() +
-                        ", " + (int)loc.getY() + ", " + (int)loc.getZ());
-                return true;
-            } else if(action.equalsIgnoreCase("list")) {
-                List<Warp> plWarps = manager.getWarps(target);
-                if(plWarps == null || plWarps.size() < 1) {
-                    player.sendMessage(ChatColor.RED + "That player doesn't have any warps!");
-                } else {
-                    player.sendMessage(ChatColor.GREEN + "Warps:");
-                    for(Warp w : plWarps) {
-                        if(w.getVisible())
-                            player.sendMessage(ChatColor.BLUE + "    " + w.getName());
-                    }
-                }
-                return true;
-            } else if(action.equalsIgnoreCase("go")) {
+            if(action.equalsIgnoreCase("new"))
+                return newWarp(player, target);
+            else if(action.equalsIgnoreCase("list"))
+                return listWarps(plugin.getServer().getPlayer(target), player);
+            else if(action.equalsIgnoreCase("go"))
+                return goToWarp(player, player, target);
+            else if(action.equalsIgnoreCase("delete")) {
                 Warp w = manager.getWarp(player, target);
-                if(w == null) {
-                    player.sendMessage(ChatColor.RED + "You don't have a warp named " +
-                            ChatColor.YELLOW + target);
-                } else {
-                    manager.sendTo(player, w);
-                }
-                return true;
-            } else if(action.equalsIgnoreCase("delete")) {
-                Warp w = manager.getWarp(player, target);
-                if(w == null) {
-                    player.sendMessage(ChatColor.RED + "You don't have a warp named " +
-                            ChatColor.YELLOW + target);
-                } else {
+                if(w == null)
+                    player.sendMessage(_("noWarpName", new Object[]{target}));
+                else {
                     manager.removeWarp(player, w);
-                    player.sendMessage(ChatColor.GREEN + "The warp " + ChatColor.YELLOW +
-                            target + ChatColor.GREEN + " has been deleted");
+                    player.sendMessage(_("warpDeleted", new Object[] {target}));
                 }
                 return true;
             } else if(action.equalsIgnoreCase("public")) {
                 Warp w = manager.getWarp(player, target);
-                if(w == null) {
-                    player.sendMessage(ChatColor.RED + "You don't have a warp named " +
-                            ChatColor.YELLOW + target);
-                } else {
+                if(w == null)
+                    player.sendMessage(_("noWarpName", new Object[]{target}));
+                else
                     w.setVisible(true);
-                }
                 return true;
             } else if(action.equalsIgnoreCase("find")) {
                 Warp w = manager.getWarp(player, target);
-                if(w == null) {
-                    player.sendMessage(ChatColor.RED + "You dont have a warp named " +
-                            ChatColor.YELLOW + target);
-                } else {
+                if(w == null)
+                    player.sendMessage(_("noWarpName", new Object[]{target}));
+                else {
                     player.setCompassTarget(w.getTarget());
-                    player.sendMessage(ChatColor.GREEN + "Your compass is now pointing toward the warp");
+                    player.sendMessage(_("compass"));
                 }
                 return true;
             } else if(action.equalsIgnoreCase("info")) {
                 Warp w = manager.getWarp(player, target);
-                if(w == null) {
-                    player.sendMessage(ChatColor.RED + "You don't have a warp named " +
-                            ChatColor.YELLOW + target);
-                } else {
-                    Location l = w.getTarget();
-                    player.sendMessage(ChatColor.YELLOW + "Warp info for " +
-                            ChatColor.BLUE + target + ChatColor.YELLOW + ":");
-                    player.sendMessage(ChatColor.GREEN + "  Location:");
-                    player.sendMessage(ChatColor.BLUE + "    X: " + (int)l.getX());
-                    player.sendMessage(ChatColor.BLUE + "    Y: " + (int)l.getY());
-                    player.sendMessage(ChatColor.BLUE + "    Z: " + (int)l.getZ());
-                    player.sendMessage(ChatColor.BLUE + "    World: " + l.getWorld().getName());
-                    player.sendMessage(ChatColor.GREEN + "  Visibility: " +
-                        ChatColor.BLUE + (w.getVisible()?"public":"private"));
+                if(w == null)
+                    player.sendMessage(_("noWarpName", new Object[]{target}));
+                else {
+                    showInfo(w, player);
                 }
                 return true;
             }
+        // Commands of the form /command [arg] [arg] [arg]..[argn]
         } else if(args.length < 2) {
             String action = args[0];
             String target = args[1];
             String targetTwo = args[2];
             if(action.equalsIgnoreCase("go")) {
                 Warp w = manager.getWarp(target, targetTwo);
-                if(w == null || !w.getVisible()) {
-                    player.sendMessage(ChatColor.RED + target + " doesn't have a warp"
-                            + " by that name!");
-                } else
+                if(w == null || !w.getVisible())
+                    player.sendMessage(_("plNoWarp", new Object[]{target, targetTwo}));
+                else
                     manager.sendTo(player, w);
                 return true;
             }
