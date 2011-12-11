@@ -34,5 +34,14 @@ Dependencies
 Points depends on FlatDB, which is a flatfile database API. It can be
 obtained here: http://www.github.com/s0lder/FlatDB
 
-Place the jar for FlatDB in the lib folder in your Bukkit server, as well
-as in your classpath if you intend to build Points.
+Place the jar for FlatDB in the lib/ folder in your Bukkit server.
+
+Building
+--------
+
+I use Apache Ant to handle my builds. You'll have to install Ant if you
+want to build Points. The process is fairly simple. In order to build
+Points, all you need is the latest FlatDB (above) and a Bukkit API
+jar (http://ci.bukkit.org). Make a lib/ directory, place the two
+jars in it, and then execute 'ant clean build jar'. It'll create
+a dist/ directory containing the resulting jar.
