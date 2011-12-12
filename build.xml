@@ -4,6 +4,7 @@
     <property name="lib" value="lib" />
     <property name="dist" value="dist" />
     <property name="name" value="Point" />
+    <property name="version" value="1.5.2" />
 
     <path id="classpath">
         <fileset dir="${lib}" includes="**/*.jar" />
@@ -32,7 +33,9 @@
         <jar basedir="${classes}" destfile="${dist}/${name}.jar">
             <manifest>
                 <attribute name="Class-Path" value="../lib/FlatDB.jar" />
-                <attribute name="Built-By" value="s0lder" />
+                <attribute name="Implementation-Version"
+                    value="${version}-${build.number}" />
+                <attribute name="Built-By" value="${user.name}" />
                 <attribute name="Built-Date" value="${TODAY}" />
             </manifest>
         </jar>
