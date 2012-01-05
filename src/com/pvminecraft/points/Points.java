@@ -17,6 +17,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import sun.nio.cs.ext.GB18030;
 
 /**
  *
@@ -39,7 +40,7 @@ public class Points extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        Points.buildMessages();
+        buildMessages();
         homesManager = new HomeCommand(this);
         warpManager = new WarpManager(this);
         warpCommand = new WarpCommand(this);
@@ -62,7 +63,7 @@ public class Points extends JavaPlugin {
         return warpManager;
     }
 
-    public static String _(String message, Object[] arr) {
+    public static String _(String message, Object... arr) {
         if(messages == null)
             buildMessages();
         MessageFormat msg = messages.get(message);
@@ -74,7 +75,7 @@ public class Points extends JavaPlugin {
     }
 
     public static String _(String message) {
-        return _(message, null);
+        return _(message, (Object) null);
     }
 
     public static void buildMessages() {
@@ -87,6 +88,11 @@ public class Points extends JavaPlugin {
         } catch(IOException ex) {
             System.err.println("Couldn't read message properties file!");
             return;
+        } catch(NullPointerException ex) {
+            System.err.println("Couldn't read message properties file!");
+            if(in == null)
+                System.err.println("The InputStream is null!");
+            return;
         }
         en = messageProps.propertyNames();
         while(en.hasMoreElements()) {
@@ -95,6 +101,7 @@ public class Points extends JavaPlugin {
             MessageFormat form = new MessageFormat(prop.replaceAll("&", "\u00a7").replaceAll("`", ""));
             messages.put(key, form);
         }
+        System.out.println("[Points] Loaded Messages");
     }
     
     @Override

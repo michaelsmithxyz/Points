@@ -21,11 +21,23 @@ public class WarpManager {
         warps = new HashMap<String, List<Warp>>();
         plugin = pl;
     }    
-    
+
+    /**
+     * Fetches and returns the specified warp owned by the specified player
+     * @param The player who owns the target warp
+     * @param The name of the target warp
+     * @return The specified warp
+     */
     public Warp getWarp(Player pl, String warpName) {
         return getWarp(pl.getName(), warpName);
     }
-    
+
+    /**
+     * Fetches and returns the specified warp owned by the specified player
+     * @param The player who owns the target warp
+     * @param The name of the target warp
+     * @return The specified warp
+     */
     public Warp getWarp(String pl, String warpName) {
         List<Warp> list = warps.get(pl);
         if(list == null)
@@ -36,15 +48,30 @@ public class WarpManager {
         }
         return null;
     }
-    
+
+    /**
+     * Fetches and returns a list of all of a player's warps
+     * @param The player who's warps you wish to get
+     * @return A list of the player's warps
+     */
     public List<Warp> getWarps(Player pl) {
         return warps.get(pl.getName());
     }
-    
+
+    /**
+     * Fetches and returns a list of all of a player's warps
+     * @param The player who's warps you wish to get
+     * @return A list of the player's warps
+     */
     public List<Warp> getWarps(String pl) {
         return warps.get(pl);
     }
-    
+
+    /**
+     * Adds the provided warp to the target player's warp list.
+     * @param The player who will get the warp
+     * @param The warp to be added
+     */
     public void addWarp(Player pl, Warp w) {
         List<Warp> plWarps = warps.get(pl.getName());
         if(plWarps == null) {
@@ -54,31 +81,56 @@ public class WarpManager {
         plWarps.add(w);
     }
 
+    /**
+     * Removes the provided warp from the player's warp list.
+     * @param The player who's warp will be removed
+     * @param The warp to be added
+     */
     public void removeWarp(Player pl, Warp w) {
         List<Warp> plWarps = warps.get(pl.getName());
         if(plWarps == null)
             return;
         plWarps.remove(w);
     }
-    
+
+    /**
+     * Sends the given player to the given warp.
+     * @param The player who will be teleported
+     * @param The warp to which the player will go
+     * @return True on success, false on failure
+     */
     public boolean sendTo(Player pl, Warp warp) {
         if(warp == null)
             return false;
         pl.teleport(warp.getTarget());
         return true;
     }
-    
+
+    /**
+     * Sends the given player to the given warp.
+     * @param The player who will be teleported
+     * @param The warp to which the player will go
+     * @return True on success, false on failure
+     */
     public boolean sendTo(Player pl, String warp) {
         Warp target = getWarp(pl, warp);
         return sendTo(pl, target);
     }
 
+    /**
+     * Returns the HashMap of all players' warp lists
+     * @return A HashMap of all warps
+     */
     public HashMap<String, List<Warp>> getWarpTable() {
         return warps;
     }
 
     // Saving and Loading Routines
 
+    /**
+     * Loads the warps of all players.
+     * @param The directory containing the databases
+     */
     public void loadWarps(String dir) {
         String player, dbFile;
         FlatDB playersDB = new FlatDB(dir, "players.db");
@@ -109,6 +161,10 @@ public class WarpManager {
         warps.put(player, playerWarps);
     }
 
+    /**
+     * Saves the warps of all players
+     * @param The directory to save to
+     */
     public void savePlayers(String dir) {
         for(Map.Entry<String, List<Warp>> entry : warps.entrySet()) {
             String playerName = entry.getKey();

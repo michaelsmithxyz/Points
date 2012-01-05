@@ -23,7 +23,8 @@
                 <include name="**/*.properties" />
             </fileset>
         </copy>
-        <javac srcdir="${src}" destdir="${classes}" classpathref="classpath" />
+        <javac srcdir="${src}" destdir="${classes}" 
+            classpathref="classpath" includeantruntime="false" />
     </target>
 
     <target name="jar">
@@ -38,5 +39,11 @@
                 <attribute name="Built-Date" value="${TODAY}" />
             </manifest>
         </jar>
+    </target>
+
+    <target name="javadoc" description="Build Javadoc from Java source files">
+        <javadoc destdir="build/javadoc/" sourcepath="${src}">
+            <fileset includes="**/.java" dir="${src}"/>
+        </javadoc>
     </target>
 </project>
