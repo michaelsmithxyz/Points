@@ -1,6 +1,6 @@
 package com.pvminecraft.points.commands;
 
-import static com.pvminecraft.points.Points._;
+import static com.pvminecraft.points.Messages._;
 import com.pvminecraft.points.Points;
 import com.pvminecraft.points.warps.Warp;
 import com.pvminecraft.points.warps.WarpManager;

@@ -1,6 +1,6 @@
 package com.pvminecraft.points.commands;
 
-import static com.pvminecraft.points.Points._;
+import static com.pvminecraft.points.Messages._;
 import com.pvminecraft.FlatDB.FlatDB;
 import com.pvminecraft.FlatDB.Row;
 import com.pvminecraft.points.Points;

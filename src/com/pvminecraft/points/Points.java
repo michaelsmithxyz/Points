@@ -6,18 +6,11 @@ import com.pvminecraft.points.commands.WarpCommand;
 import com.pvminecraft.points.plugins.PointsPlugin;
 import com.pvminecraft.points.plugins.signs.WarpSignManager;
 import com.pvminecraft.points.warps.WarpManager;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.MessageFormat;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Properties;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import sun.nio.cs.ext.GB18030;
 
 /**
  *
@@ -29,7 +22,6 @@ public class Points extends JavaPlugin {
     private WarpManager warpManager;
     private PointsCommand pointsCommand;
     private PointsPlugin signPlugin;
-    private static HashMap<String, MessageFormat> messages;
     
     @Override
     public void onDisable() {
@@ -40,7 +32,7 @@ public class Points extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        buildMessages();
+        Messages.buildMessages();
         homesManager = new HomeCommand(this);
         warpManager = new WarpManager(this);
         warpCommand = new WarpCommand(this);
@@ -62,54 +54,13 @@ public class Points extends JavaPlugin {
     public WarpManager getWarpManager() {
         return warpManager;
     }
-
-    public static String _(String message, Object... arr) {
-        if(messages == null)
-            buildMessages();
-        MessageFormat msg = messages.get(message);
-        if(msg == null)
-            return "";
-        if(arr != null)
-            return msg.format(arr);
-        return msg.toPattern();
-    }
-
-    public static String _(String message) {
-        return _(message, (Object) null);
-    }
-
-    public static void buildMessages() {
-        Properties messageProps = new Properties();
-        InputStream in = Points.class.getResourceAsStream("resources/messages.properties");
-        messages = new HashMap<String, MessageFormat>();
-        Enumeration en;
-        try {
-            messageProps.load(in);
-        } catch(IOException ex) {
-            System.err.println("Couldn't read message properties file!");
-            return;
-        } catch(NullPointerException ex) {
-            System.err.println("Couldn't read message properties file!");
-            if(in == null)
-                System.err.println("The InputStream is null!");
-            return;
-        }
-        en = messageProps.propertyNames();
-        while(en.hasMoreElements()) {
-            String key = (String)en.nextElement();
-            String prop = messageProps.getProperty(key);
-            MessageFormat form = new MessageFormat(prop.replaceAll("&", "\u00a7").replaceAll("`", ""));
-            messages.put(key, form);
-        }
-        System.out.println("[Points] Loaded Messages");
-    }
     
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player player = (Player)sender;
         if(command.getName().equalsIgnoreCase("spawn")) {
             if(!player.hasPermission("points.spawn")) {
-                player.sendMessage(_("alertNoPerm"));
+                player.sendMessage(Messages._("alertNoPerm"));
                 return true;
             }
             if(args.length < 0 && args[0].equalsIgnoreCase("bed")) {
