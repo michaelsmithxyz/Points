@@ -223,6 +223,8 @@ public class WarpCommand implements CommandExecutor {
                  " - " + ChatColor.BLUE + "Go to the given player's warp");
         pl.sendMessage(ChatColor.GREEN + "/warp invite [player] [name] " + ChatColor.WHITE +
                  " - " + ChatColor.BLUE + "Invite a player to a warp");
+        pl.sendMessage(ChatColor.GREEN + "/warp accept " + ChatColor.WHITE +
+                 " - " + ChatColor.BLUE + "Accept a warp invitation");
         
     }
 }

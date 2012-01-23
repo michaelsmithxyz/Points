@@ -16,10 +16,12 @@ import org.bukkit.entity.Player;
 public class WarpManager {
     private Points plugin;
     private HashMap<String, List<Warp>> warps;
+    private ArrayList<Warp> globals;
     
     public WarpManager(Points pl) {
         warps = new HashMap<String, List<Warp>>();
         plugin = pl;
+        globals = new ArrayList<Warp>();
     }    
 
     /**
@@ -141,6 +143,23 @@ public class WarpManager {
             System.out.println("[Points] Loading Player: " + player);
             loadPlayer(player, dir, dbFile);
         }
+        loadGlobals(dir);
+    }
+
+    private void loadGlobals(String dir) {
+        Warp warp;
+        FlatDB database = new FlatDB(dir, "globals.db");
+        List<Row> rows = database.getAll();
+        globals.clear();
+        for(Row r : rows) {
+            try {
+                warp = Warp.fromRow(r, plugin, "server");
+            } catch(NullPointerException e) {
+                System.err.println("[Points] Error loading global");
+                continue;
+            }
+            globals.add(warp);
+        }
     }
 
     private void loadPlayer(String player, String dir, String dbFile) {
@@ -165,11 +184,28 @@ public class WarpManager {
      * Saves the warps of all players
      * @param The directory to save to
      */
-    public void savePlayers(String dir) {
+    public void saveWarps(String dir) {
         for(Map.Entry<String, List<Warp>> entry : warps.entrySet()) {
             String playerName = entry.getKey();
             savePlayer(playerName, dir);
         }
+        saveGlobals(dir);
+    }
+
+    private void saveGlobals(String dir) {
+        FlatDB database = new FlatDB(dir, "globals.db");
+        Row row;
+        for(Warp w : globals) {
+            try {
+                row = Warp.toRow(w);
+            } catch(NullPointerException e) {
+                System.err.println("[Points] Error saving global");
+                continue;
+            }
+            database.addRow(row);
+        }
+        database.update();
+        cleanWarps("server", database);
     }
 
     private void savePlayer(String name, String dir) {

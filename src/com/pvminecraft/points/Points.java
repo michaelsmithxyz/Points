@@ -26,7 +26,7 @@ public class Points extends JavaPlugin {
     @Override
     public void onDisable() {
         homesManager.saveHomes();
-        warpManager.savePlayers(getDataFolder().getPath());
+        warpManager.saveWarps(getDataFolder().getPath());
         signPlugin.disable();
     }
 
@@ -63,13 +63,23 @@ public class Points extends JavaPlugin {
                 player.sendMessage(Messages._("alertNoPerm"));
                 return true;
             }
-            if(args.length < 0 && args[0].equalsIgnoreCase("bed")) {
-                Location bed = player.getBedSpawnLocation();
-                if(bed != null)
-                    teleportTo(player, bed);
-                else
-                    teleportTo(player, player.getLocation().getWorld().getSpawnLocation());
-                return true;
+            if(args.length > 0) {
+                if(args[0].equalsIgnoreCase("bed")) {
+                    Location bed = player.getBedSpawnLocation();
+                    if(bed != null)
+                        teleportTo(player, bed);
+                    else
+                        teleportTo(player, player.getLocation().getWorld().getSpawnLocation());
+                    return true;
+                } else if(args[0].equalsIgnoreCase("set")) {
+                    if(!player.hasPermission("points.admin")) {
+                        player.sendMessage(Messages._("alertNoPerm"));
+                        return true;
+                    }
+                    Location newLoc = player.getLocation();
+                    newLoc.getWorld().setSpawnLocation(newLoc.getBlockX(),
+                            newLoc.getBlockY(), newLoc.getBlockZ());
+                }
             } else {
                 teleportTo(player, player.getLocation().getWorld().getSpawnLocation());
                 return true;
