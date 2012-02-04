@@ -24,7 +24,8 @@
             </fileset>
         </copy>
         <javac srcdir="${src}" destdir="${classes}" 
-            classpathref="classpath" includeantruntime="false" />
+            classpathref="classpath"  target="1.6"
+            includeantruntime="false" />
     </target>
 
     <target name="jar">
@@ -33,8 +34,6 @@
         <jar basedir="${classes}" destfile="${dist}/${name}.jar">
             <zipgroupfileset dir="lib" includes="FlatDB.jar" />
             <manifest>
-                <attribute name="Implementation-Version"
-                    value="${build.number}" />
                 <attribute name="Built-By" value="${user.name}" />
                 <attribute name="Built-Date" value="${TODAY}" />
             </manifest>
