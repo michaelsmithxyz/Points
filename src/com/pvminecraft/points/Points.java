@@ -5,7 +5,7 @@ import com.pvminecraft.points.commands.PointsCommand;
 import com.pvminecraft.points.commands.WarpCommand;
 import com.pvminecraft.points.plugins.PointsPlugin;
 import com.pvminecraft.points.plugins.signs.WarpSignManager;
-import com.pvminecraft.points.warps.WarpManager;
+import com.pvminecraft.points.warps.PlayerWarpManager;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -19,7 +19,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Points extends JavaPlugin {
     private HomeCommand homesManager;
     private WarpCommand warpCommand;
-    private WarpManager warpManager;
+    private PlayerWarpManager warpManager;
     private PointsCommand pointsCommand;
     private PointsPlugin signPlugin;
     
@@ -34,7 +34,7 @@ public class Points extends JavaPlugin {
     public void onEnable() {
         Messages.buildMessages();
         homesManager = new HomeCommand(this);
-        warpManager = new WarpManager(this);
+        warpManager = new PlayerWarpManager(this);
         warpCommand = new WarpCommand(this);
         pointsCommand = new PointsCommand(this);
         signPlugin = new WarpSignManager(this);
@@ -51,7 +51,7 @@ public class Points extends JavaPlugin {
         System.out.println("[Points] Points is now active.");
     }
     
-    public WarpManager getWarpManager() {
+    public PlayerWarpManager getWarpManager() {
         return warpManager;
     }
     

@@ -25,6 +25,10 @@ public class Warp {
         this.name = name;
     }
     
+    protected void setOwner(String owner) {
+        this.owner = owner;
+    }
+    
     public static Warp fromRow(Row row, JavaPlugin pl, String owner) {
         Location loc = Locations.fromRow(row, pl);
         boolean vis = "true".equals(row.getElement("visible"))?true:false;

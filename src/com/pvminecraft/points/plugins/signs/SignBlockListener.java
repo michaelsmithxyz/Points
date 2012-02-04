@@ -6,7 +6,7 @@ package com.pvminecraft.points.plugins.signs;
 
 import com.pvminecraft.points.Points;
 import com.pvminecraft.points.warps.Warp;
-import com.pvminecraft.points.warps.WarpManager;
+import com.pvminecraft.points.warps.PlayerWarpManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
@@ -23,10 +23,10 @@ import org.bukkit.event.block.SignChangeEvent;
  */
 public class SignBlockListener extends BlockListener {
     private Points plugin;
-    private WarpManager manager;
+    private PlayerWarpManager manager;
     private WarpSignManager sMgr;
     
-    public SignBlockListener(Points pl, WarpManager wm, WarpSignManager sign) {
+    public SignBlockListener(Points pl, PlayerWarpManager wm, WarpSignManager sign) {
         plugin = pl;
         manager = wm;
         sMgr = sign;

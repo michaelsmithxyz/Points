@@ -6,7 +6,7 @@ package com.pvminecraft.points.plugins.signs;
 
 import com.pvminecraft.points.Points;
 import com.pvminecraft.points.warps.Warp;
-import com.pvminecraft.points.warps.WarpManager;
+import com.pvminecraft.points.warps.PlayerWarpManager;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.event.Event.Priority;
@@ -21,10 +21,10 @@ import org.bukkit.event.player.PlayerListener;
  */
 public class SignPlayerListener extends PlayerListener {
     private Points plugin;
-    private WarpManager manager;
+    private PlayerWarpManager manager;
     private WarpSignManager sMgr;
     
-    public SignPlayerListener(Points pl, WarpManager wm, WarpSignManager sign) {
+    public SignPlayerListener(Points pl, PlayerWarpManager wm, WarpSignManager sign) {
         plugin = pl;
         manager = wm;
         sMgr = sign;

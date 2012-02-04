@@ -7,7 +7,7 @@ package com.pvminecraft.points.plugins.signs;
 import com.pvminecraft.FlatDB.Row;
 import com.pvminecraft.points.utils.Locations;
 import com.pvminecraft.points.warps.Warp;
-import com.pvminecraft.points.warps.WarpManager;
+import com.pvminecraft.points.warps.PlayerWarpManager;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -28,7 +28,7 @@ public class WarpSign {
         location = loc;
     }
     
-    public static WarpSign fromRow(Row row, JavaPlugin pl, WarpManager wm) {
+    public static WarpSign fromRow(Row row, JavaPlugin pl, PlayerWarpManager wm) {
         Location loc = Locations.fromRow(row, pl);
         Block bl = loc.getBlock();
         if(!(bl.getState() instanceof Sign))

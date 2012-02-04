@@ -1,9 +1,10 @@
 package com.pvminecraft.points.commands;
 
+
 import static com.pvminecraft.points.Messages._;
 import com.pvminecraft.points.Points;
 import com.pvminecraft.points.warps.Warp;
-import com.pvminecraft.points.warps.WarpManager;
+import com.pvminecraft.points.warps.PlayerWarpManager;
 import java.util.HashMap;
 import java.util.List;
 import org.bukkit.ChatColor;
@@ -19,7 +20,7 @@ import org.bukkit.entity.Player;
  */
 public class WarpCommand implements CommandExecutor {
     private Points plugin;
-    private WarpManager manager;
+    private PlayerWarpManager manager;
     private HashMap<Player, Warp> requests;
     
     public WarpCommand(Points ins) {
