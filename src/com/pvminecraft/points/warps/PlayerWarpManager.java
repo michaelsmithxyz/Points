@@ -13,17 +13,33 @@ import org.bukkit.entity.Player;
  *
  * @author s0lder
  */
-public class PlayerWarpManager {
+public class PlayerWarpManager implements WarpManager {
     private Points plugin;
     private HashMap<String, List<Warp>> warps;
-    private ArrayList<Global> globals;
+    private String directory;
     
     public PlayerWarpManager(Points pl) {
         warps = new HashMap<String, List<Warp>>();
         plugin = pl;
-        globals = new ArrayList<Global>();
+        directory = plugin.getDataFolder().getPath();
     }
     
+    @Override
+    public void addWarp(String player, Warp warp) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    @Override
+    public void addWarp(Player pl, Warp w) {
+        List<Warp> plWarps = warps.get(pl.getName());
+        if(plWarps == null) {
+            plWarps = new ArrayList<Warp>();
+            warps.put(pl.getName(), plWarps);
+        }
+        plWarps.add(w);
+    }
+    
+    @Override
     public Warp getWarp(String pl, String warpName) {
         List<Warp> list = warps.get(pl);
         if(list == null)
@@ -34,95 +50,64 @@ public class PlayerWarpManager {
         return null;
     }
 
+    @Override
     public Warp getWarp(Player pl, String warpName) {
         return getWarp(pl.getName(), warpName);
     }
-
-    public List<Warp> getWarps(Player pl) {
-        return warps.get(pl.getName());
-    }
-
-    public List<Warp> getWarps(String pl) {
-        return warps.get(pl);
-    }
     
-    public Warp getGlobal(String name) {
-        for(Warp w : globals)
-            if(w.getName().equalsIgnoreCase(name))
-                return w;
-        return null;
-    }
-    
-    public List<Global> getGlobals() {
-        return globals;
-    }
-
-    public void addWarp(Player pl, Warp w) {
-        List<Warp> plWarps = warps.get(pl.getName());
-        if(plWarps == null) {
-            plWarps = new ArrayList<Warp>();
-            warps.put(pl.getName(), plWarps);
-        }
-        plWarps.add(w);
-    }
-    
-    public void addGlobal(Global global) {
-        globals.add(global);
-    }
-
+    @Override
     public void removeWarp(Player pl, Warp w) {
         List<Warp> plWarps = warps.get(pl.getName());
         if(plWarps == null)
             return;
         plWarps.remove(w);
     }
+    
+    @Override
+    public List<Warp> getWarps(String pl) {
+        return warps.get(pl);
+    }
 
-    public boolean sendTo(Player pl, Warp warp) {
+    @Override
+    public List<Warp> getWarps(Player pl) {
+        return warps.get(pl.getName());
+    }
+    
+    @Override
+    public List<Warp> getAll() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void sendTo(Player player, Warp warp) {
         if(warp == null)
-            return false;
-        pl.teleport(warp.getTarget());
-        return true;
+            return;
+        player.teleport(warp.getTarget());
     }
 
-    public boolean sendTo(Player pl, String warp) {
-        Warp target = getWarp(pl, warp);
-        return sendTo(pl, target);
-    }
-
-    public HashMap<String, List<Warp>> getWarpTable() {
-        return warps;
-    }
-
-    // Saving and Loading Routines
-
-    public void loadWarps(String dir) {
+    @Override
+    public void load() {
         String player, dbFile;
-        FlatDB playersDB = new FlatDB(dir, "players.db");
+        FlatDB playersDB = new FlatDB(directory, "players.db");
         List<Row> playerRows =  playersDB.getAll();
         for(Row r : playerRows) {
             player = r.getIndex();
             dbFile = r.getElement("db");
             System.out.println("[Points] Loading Player: " + player);
-            loadPlayer(player, dir, dbFile);
-        }
-        loadGlobals(dir);
-    }
-
-    private void loadGlobals(String dir) {
-        Warp warp;
-        FlatDB database = new FlatDB(dir, "globals.db");
-        List<Row> rows = database.getAll();
-        globals.clear();
-        for(Row r : rows) {
-            try {
-                warp = Warp.fromRow(r, plugin, "server");
-            } catch(NullPointerException e) {
-                System.err.println("[Points] Error loading global");
-                continue;
-            }
-            globals.add(Global.fromWarp(warp));
+            loadPlayer(player, directory, dbFile);
         }
     }
+    
+    @Override
+    public void save() {
+        for(Map.Entry<String, List<Warp>> entry : warps.entrySet()) {
+            String playerName = entry.getKey();
+            savePlayer(playerName, directory);
+        }
+    }
+    
+    //Private Utility Methods
+    //Mainly for Loading and Saving
 
     private void loadPlayer(String player, String dir, String dbFile) {
         Warp warp;
@@ -140,29 +125,6 @@ public class PlayerWarpManager {
             playerWarps.add(warp);
         }
         warps.put(player, playerWarps);
-    }
-
-    public void saveWarps(String dir) {
-        for(Map.Entry<String, List<Warp>> entry : warps.entrySet()) {
-            String playerName = entry.getKey();
-            savePlayer(playerName, dir);
-        }
-        saveGlobals(dir);
-    }
-
-    private void saveGlobals(String dir) {
-        FlatDB database = new FlatDB(dir, "globals.db");
-        Row row;
-        for(Warp w : globals) {
-            try {
-                row = Warp.toRow(w);
-            } catch(NullPointerException e) {
-                System.err.println("[Points] Error saving global");
-                continue;
-            }
-            database.addRow(row);
-        }
-        database.update();
     }
 
     private void savePlayer(String name, String dir) {

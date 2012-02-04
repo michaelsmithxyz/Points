@@ -26,7 +26,7 @@ public class Points extends JavaPlugin {
     @Override
     public void onDisable() {
         homesManager.saveHomes();
-        warpManager.saveWarps(getDataFolder().getPath());
+        warpManager.save();
         signPlugin.disable();
     }
 
@@ -40,7 +40,7 @@ public class Points extends JavaPlugin {
         signPlugin = new WarpSignManager(this);
         
         homesManager.loadHomes();
-        warpManager.loadWarps(getDataFolder().getPath());
+        warpManager.load();
         
         getCommand("home").setExecutor(homesManager);
         getCommand("sethome").setExecutor(homesManager);

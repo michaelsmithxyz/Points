@@ -16,6 +16,8 @@ public interface WarpManager {
     
     Warp getWarp(Player player, String name);
     
+    void removeWarp(Player player, Warp warp);
+    
     List<Warp> getWarps(String player);
     
     List<Warp> getWarps(Player player);
@@ -23,4 +25,8 @@ public interface WarpManager {
     List<Warp> getAll(); 
     
     void sendTo(Player player, Warp warp);
+    
+    void load();
+    
+    void save();
 }
