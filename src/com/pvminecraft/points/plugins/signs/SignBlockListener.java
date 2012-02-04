@@ -5,23 +5,22 @@
 package com.pvminecraft.points.plugins.signs;
 
 import com.pvminecraft.points.Points;
-import com.pvminecraft.points.warps.Warp;
 import com.pvminecraft.points.warps.PlayerWarpManager;
+import com.pvminecraft.points.warps.Warp;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.SignChangeEvent;
 
 /**
  *
  * @author s0lder
  */
-public class SignBlockListener extends BlockListener {
+public class SignBlockListener implements Listener {
     private Points plugin;
     private PlayerWarpManager manager;
     private WarpSignManager sMgr;
@@ -30,13 +29,10 @@ public class SignBlockListener extends BlockListener {
         plugin = pl;
         manager = wm;
         sMgr = sign;
-        plugin.getServer().getPluginManager().registerEvent(Type.BLOCK_BREAK,
-                this, Priority.Normal, plugin);
-        plugin.getServer().getPluginManager().registerEvent(Type.SIGN_CHANGE,
-                this, Priority.Normal, plugin);
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    @Override
+    @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         if(event.getBlock().getState() instanceof Sign) {
             Location loc = event.getBlock().getLocation();
@@ -47,7 +43,7 @@ public class SignBlockListener extends BlockListener {
         }
     }
 
-    @Override
+    @EventHandler
     public void onSignChange(SignChangeEvent event) {
         String[] lines = event.getLines();
         Player player = event.getPlayer();

@@ -1,25 +1,20 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.pvminecraft.points.plugins.signs;
 
 import com.pvminecraft.points.Points;
-import com.pvminecraft.points.warps.Warp;
 import com.pvminecraft.points.warps.PlayerWarpManager;
+import com.pvminecraft.points.warps.Warp;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerListener;
 
 /**
  *
  * @author s0lder
  */
-public class SignPlayerListener extends PlayerListener {
+public class SignPlayerListener implements Listener {
     private Points plugin;
     private PlayerWarpManager manager;
     private WarpSignManager sMgr;
@@ -28,11 +23,10 @@ public class SignPlayerListener extends PlayerListener {
         plugin = pl;
         manager = wm;
         sMgr = sign;
-        plugin.getServer().getPluginManager().registerEvent(Type.PLAYER_INTERACT,
-                this, Priority.Normal, plugin);
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    @Override
+    @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Block bl = event.getClickedBlock();
         if((event.getAction() == Action.RIGHT_CLICK_BLOCK) && (bl.getState() instanceof Sign)) {
