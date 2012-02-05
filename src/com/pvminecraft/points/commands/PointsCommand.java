@@ -2,15 +2,18 @@ package com.pvminecraft.points.commands;
 
 import com.pvminecraft.points.Points;
 import static com.pvminecraft.points.Messages._;
+import com.pvminecraft.points.warps.GlobalWarp;
 import com.pvminecraft.points.warps.Warp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  *
@@ -52,6 +55,20 @@ public class PointsCommand implements CommandExecutor {
                 showHelp(cs);
                 return true;
             }
+        } else if(args.length == 2) {
+            if(args[0].equalsIgnoreCase("addglobal")) {
+                if(!(cs instanceof Player)) {
+                    cs.sendMessage(_("noConsole"));
+                    return true;
+                }
+                String name = args[1];
+                Location location = ((Player) cs).getLocation();               
+                GlobalWarp warp = new GlobalWarp(location, "server", name);
+                plugin.getGlobalManager().addWarp(warp);
+                cs.sendMessage(_("warpCreate", warp.getName(), location.getX(),
+                                 location.getY(), location.getZ()));
+                return true;
+            }
         }
         showHelp(cs);
         return true;
@@ -65,6 +82,8 @@ public class PointsCommand implements CommandExecutor {
                  " - " + ChatColor.BLUE + "Display all players who have warps");
         cs.sendMessage(ChatColor.GREEN + "/points ? " + ChatColor.WHITE +
                  " - " + ChatColor.BLUE + "Display this help screen");
+        cs.sendMessage(ChatColor.GREEN + "/points addglobal " + ChatColor.WHITE +
+                 " - " + ChatColor.BLUE + "Create a new global warp");
     }
 
     private HashMap<String, List<Warp>> buildTable(List<Warp> all) {

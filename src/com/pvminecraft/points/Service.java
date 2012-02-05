@@ -10,7 +10,7 @@ import com.pvminecraft.points.warps.WarpManager;
  *
  * @author michael
  */
-public interface PointsService {
+public interface Service {
     WarpManager getGlobalManager();
     
     WarpManager getPlayerManager();

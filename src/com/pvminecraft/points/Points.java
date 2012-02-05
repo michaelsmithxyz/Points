@@ -19,7 +19,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  *
  * @author s0lder
  */
-public class Points extends JavaPlugin implements PointsService {
+public class Points extends JavaPlugin implements Service {
     private HomeCommand homesCommand;
     private WarpCommand warpCommand;
     private PointsCommand pointsCommand;
@@ -41,12 +41,12 @@ public class Points extends JavaPlugin implements PointsService {
         ServicesManager sm = getServer().getServicesManager();
         
         Messages.buildMessages();
+        playerManager = new PlayerWarpManager(this);
+        globalManager = new GlobalWarpManager(this);
         homesCommand = new HomeCommand(this);
         warpCommand = new WarpCommand(this);
         pointsCommand = new PointsCommand(this);
         spawnCommand = new SpawnCommand();
-        playerManager = new PlayerWarpManager(this);
-        globalManager = new GlobalWarpManager(this);
         
         signPlugin = new WarpSignManager(this);
         
@@ -62,7 +62,7 @@ public class Points extends JavaPlugin implements PointsService {
 
         signPlugin.enable();
         
-        sm.register(PointsService.class, this, this, ServicePriority.High);
+        sm.register(Service.class, this, this, ServicePriority.High);
         System.out.println("[Points] Points is now active.");
     }
     

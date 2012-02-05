@@ -3,6 +3,7 @@ package com.pvminecraft.points.commands;
 
 import static com.pvminecraft.points.Messages._;
 import com.pvminecraft.points.Points;
+import com.pvminecraft.points.warps.GlobalWarpManager;
 import com.pvminecraft.points.warps.Warp;
 import com.pvminecraft.points.warps.PlayerWarpManager;
 import java.util.HashMap;
@@ -20,17 +21,19 @@ import org.bukkit.entity.Player;
  */
 public class WarpCommand implements CommandExecutor {
     private Points plugin;
-    private PlayerWarpManager manager;
+    private PlayerWarpManager playerManager;
+    private GlobalWarpManager globalManager;
     private HashMap<Player, Warp> requests;
     
     public WarpCommand(Points ins) {
         plugin = ins;
-        manager = (PlayerWarpManager) plugin.getPlayerManager();
+        playerManager = (PlayerWarpManager) plugin.getPlayerManager();
+        globalManager = (GlobalWarpManager) plugin.getGlobalManager();
         requests = new HashMap<Player, Warp>();
     }
 
     public boolean listWarps(String player, Player reciever) {
-        List<Warp> plWarps = manager.getWarps(player);
+        List<Warp> plWarps = playerManager.getWarps(player);
         if(player == null) {
             reciever.sendMessage(_("noPlayer", player));
             return true;
@@ -60,7 +63,7 @@ public class WarpCommand implements CommandExecutor {
     public boolean newWarp(Player player, String target) {
         Location loc = player.getLocation();
         Warp warp = new Warp(loc, player.getName(), target);
-        manager.addWarp(warp);
+        playerManager.addWarp(warp);
         player.sendMessage(_("warpCreate", warp.getName(), (int)loc.getX(),
                 (int)loc.getY(), (int)loc.getZ()));
         return true;
@@ -71,14 +74,14 @@ public class WarpCommand implements CommandExecutor {
             player.sendMessage(_("noPlayer", target.getName()));
             return true;
         }
-        Warp w = manager.getWarp(target.getName(), name);
+        Warp w = playerManager.getWarp(target.getName(), name);
         if(w == null) {
             if(player == target)
                 player.sendMessage(_("noWarpName", name));
             else
                 player.sendMessage(_("plNoWarp", target.getName(), name));
         } else {
-            manager.sendTo(player, w);
+            playerManager.sendTo(player, w);
         }
         return true;
     }
@@ -119,8 +122,14 @@ public class WarpCommand implements CommandExecutor {
                 else {
                     Player owner = plugin.getServer().getPlayer(w.getOwner());
                     owner.sendMessage(_("warpAccepted", player.getName()));
-                    manager.sendTo(player, w);
+                    playerManager.sendTo(player, w);
                 }
+                return true;
+            } else if(action.equalsIgnoreCase("listglobals")) {
+                List<Warp> globals = globalManager.getAll();
+                player.sendMessage(_("warpList"));
+                for(Warp warp : globals)
+                    player.sendMessage(_("warpItem", warp.getName(), "global"));
                 return true;
             }
         //Commands of the form /command [arg] [arg]
@@ -134,23 +143,23 @@ public class WarpCommand implements CommandExecutor {
             else if(action.equalsIgnoreCase("go"))
                 return goToWarp(player, player, target);
             else if(action.equalsIgnoreCase("delete")) {
-                Warp w = manager.getWarp(player.getName(), target);
+                Warp w = playerManager.getWarp(player.getName(), target);
                 if(w == null)
                     player.sendMessage(_("noWarpName", target));
                 else {
-                    manager.removeWarp(w);
+                    playerManager.removeWarp(w);
                     player.sendMessage(_("warpDeleted", target));
                 }
                 return true;
             } else if(action.equalsIgnoreCase("public")) {
-                Warp w = manager.getWarp(player.getName(), target);
+                Warp w = playerManager.getWarp(player.getName(), target);
                 if(w == null)
                     player.sendMessage(_("noWarpName", target));
                 else
                     w.setVisible(true);
                 return true;
             } else if(action.equalsIgnoreCase("find")) {
-                Warp w = manager.getWarp(player.getName(), target);
+                Warp w = playerManager.getWarp(player.getName(), target);
                 if(w == null)
                     player.sendMessage(_("noWarpName", target));
                 else {
@@ -159,12 +168,19 @@ public class WarpCommand implements CommandExecutor {
                 }
                 return true;
             } else if(action.equalsIgnoreCase("info")) {
-                Warp w = manager.getWarp(player.getName(), target);
+                Warp w = playerManager.getWarp(player.getName(), target);
                 if(w == null)
                     player.sendMessage(_("noWarpName", target));
                 else {
                     showInfo(w, player);
                 }
+                return true;
+            } else if(action.equalsIgnoreCase("global")) {
+                Warp w = globalManager.getWarp("server", target);
+                if(w == null)
+                    player.sendMessage(_("noWarpName", target));
+                else
+                    globalManager.sendTo(player, w);
                 return true;
             }
         // Commands of the form /command [arg] [arg] [arg]..[argn]
@@ -173,18 +189,18 @@ public class WarpCommand implements CommandExecutor {
             String target = args[1];
             String targetTwo = args[2];
             if(action.equalsIgnoreCase("go")) {
-                Warp w = manager.getWarp(target, targetTwo);
+                Warp w = playerManager.getWarp(target, targetTwo);
                 if(w == null || !w.getVisible())
                     player.sendMessage(_("plNoWarp", target, targetTwo));
                 else
-                    manager.sendTo(player, w);
+                    playerManager.sendTo(player, w);
                 return true;
             } else if(action.equalsIgnoreCase("invite")) {
                 Player pl = plugin.getServer().getPlayer(target);
                 if(pl == null) {
                     player.sendMessage(_("noPlayer", target));
                 } else {
-                    Warp w = manager.getWarp(player.getName(), targetTwo);
+                    Warp w = playerManager.getWarp(player.getName(), targetTwo);
                     if(w == null) {
                         player.sendMessage(_("noWarpName", targetTwo));
                     } else {
@@ -204,6 +220,8 @@ public class WarpCommand implements CommandExecutor {
         pl.sendMessage(ChatColor.YELLOW + "Help for /warp:");
         pl.sendMessage(ChatColor.GREEN + "/warp list " + ChatColor.WHITE +
                  " - " + ChatColor.BLUE + "List all of your warps");
+        pl.sendMessage(ChatColor.GREEN + "/warp listglobals" + ChatColor.WHITE +
+                 " - " + ChatColor.BLUE + "List all global warps");  
         pl.sendMessage(ChatColor.GREEN + "/warp ? " + ChatColor.WHITE +
                  " - " + ChatColor.BLUE + "Show this help screen");
         pl.sendMessage(ChatColor.GREEN + "/warp new [name] " + ChatColor.WHITE +
@@ -220,6 +238,8 @@ public class WarpCommand implements CommandExecutor {
                  " - " + ChatColor.BLUE + "List the given player's warps");
         pl.sendMessage(ChatColor.GREEN + "/warp info [name] " + ChatColor.WHITE +
                  " - " + ChatColor.BLUE + "Show information about a warp");
+        pl.sendMessage(ChatColor.GREEN + "/warp global [name]" + ChatColor.WHITE +
+                 " - " + ChatColor.BLUE + "Go to a global warp");  
         pl.sendMessage(ChatColor.GREEN + "/warp go [player] [name] " + ChatColor.WHITE +
                  " - " + ChatColor.BLUE + "Go to the given player's warp");
         pl.sendMessage(ChatColor.GREEN + "/warp invite [player] [name] " + ChatColor.WHITE +
