@@ -3,10 +3,7 @@ package com.pvminecraft.points.warps;
 import com.pvminecraft.FlatDB.FlatDB;
 import com.pvminecraft.FlatDB.Row;
 import com.pvminecraft.points.Points;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import org.bukkit.entity.Player;
 
 /**
@@ -25,23 +22,19 @@ public class PlayerWarpManager implements WarpManager {
     }
     
     @Override
-    public void addWarp(String player, Warp warp) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
-    @Override
-    public void addWarp(Player pl, Warp w) {
-        List<Warp> plWarps = warps.get(pl.getName());
+    public void addWarp(Warp warp) {
+        String player = warp.getOwner();
+        List<Warp> plWarps = warps.get(player);
         if(plWarps == null) {
             plWarps = new ArrayList<Warp>();
-            warps.put(pl.getName(), plWarps);
+            warps.put(player, plWarps);
         }
-        plWarps.add(w);
+        plWarps.add(warp);
     }
     
     @Override
-    public Warp getWarp(String pl, String warpName) {
-        List<Warp> list = warps.get(pl);
+    public Warp getWarp(String player, String warpName) {
+        List<Warp> list = warps.get(player);
         if(list == null)
             return null;
         for(Warp w : list)
@@ -49,33 +42,28 @@ public class PlayerWarpManager implements WarpManager {
                 return w;
         return null;
     }
-
-    @Override
-    public Warp getWarp(Player pl, String warpName) {
-        return getWarp(pl.getName(), warpName);
-    }
     
     @Override
-    public void removeWarp(Player pl, Warp w) {
-        List<Warp> plWarps = warps.get(pl.getName());
+    public void removeWarp(Warp warp) {
+        String player = warp.getOwner();
+        List<Warp> plWarps = warps.get(player);
         if(plWarps == null)
             return;
-        plWarps.remove(w);
+        plWarps.remove(warp);
     }
     
     @Override
-    public List<Warp> getWarps(String pl) {
-        return warps.get(pl);
-    }
-
-    @Override
-    public List<Warp> getWarps(Player pl) {
-        return warps.get(pl.getName());
+    public List<Warp> getWarps(String player) {
+        return warps.get(player);
     }
     
     @Override
     public List<Warp> getAll() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        List<Warp> ret = new ArrayList<Warp>();
+        Set<String> keyset = warps.keySet();
+        for(String key : keyset)
+            ret.addAll(warps.get(key));
+        return ret;
     }
 
     @Override

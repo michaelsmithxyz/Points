@@ -51,7 +51,7 @@ public class SignBlockListener implements Listener {
         if(!(lines[0].isEmpty() && lines[1].equalsIgnoreCase("Warp") && !lines[2].isEmpty())) {
             return;
         }
-        Warp warp = manager.getWarp(player, lines[2]);
+        Warp warp = manager.getWarp(player.getName(), lines[2]);
         if(warp == null) {
             player.sendMessage(ChatColor.RED + "That is not a valid warp!");
             return;

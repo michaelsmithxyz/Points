@@ -25,7 +25,7 @@ public class WarpCommand implements CommandExecutor {
     
     public WarpCommand(Points ins) {
         plugin = ins;
-        manager = plugin.getWarpManager();
+        manager = (PlayerWarpManager) plugin.getPlayerManager();
         requests = new HashMap<Player, Warp>();
     }
 
@@ -60,7 +60,7 @@ public class WarpCommand implements CommandExecutor {
     public boolean newWarp(Player player, String target) {
         Location loc = player.getLocation();
         Warp warp = new Warp(loc, player.getName(), target);
-        manager.addWarp(player, warp);
+        manager.addWarp(warp);
         player.sendMessage(_("warpCreate", warp.getName(), (int)loc.getX(),
                 (int)loc.getY(), (int)loc.getZ()));
         return true;
@@ -71,7 +71,7 @@ public class WarpCommand implements CommandExecutor {
             player.sendMessage(_("noPlayer", target.getName()));
             return true;
         }
-        Warp w = manager.getWarp(target, name);
+        Warp w = manager.getWarp(target.getName(), name);
         if(w == null) {
             if(player == target)
                 player.sendMessage(_("noWarpName", name));
@@ -134,23 +134,23 @@ public class WarpCommand implements CommandExecutor {
             else if(action.equalsIgnoreCase("go"))
                 return goToWarp(player, player, target);
             else if(action.equalsIgnoreCase("delete")) {
-                Warp w = manager.getWarp(player, target);
+                Warp w = manager.getWarp(player.getName(), target);
                 if(w == null)
                     player.sendMessage(_("noWarpName", target));
                 else {
-                    manager.removeWarp(player, w);
+                    manager.removeWarp(w);
                     player.sendMessage(_("warpDeleted", target));
                 }
                 return true;
             } else if(action.equalsIgnoreCase("public")) {
-                Warp w = manager.getWarp(player, target);
+                Warp w = manager.getWarp(player.getName(), target);
                 if(w == null)
                     player.sendMessage(_("noWarpName", target));
                 else
                     w.setVisible(true);
                 return true;
             } else if(action.equalsIgnoreCase("find")) {
-                Warp w = manager.getWarp(player, target);
+                Warp w = manager.getWarp(player.getName(), target);
                 if(w == null)
                     player.sendMessage(_("noWarpName", target));
                 else {
@@ -159,7 +159,7 @@ public class WarpCommand implements CommandExecutor {
                 }
                 return true;
             } else if(action.equalsIgnoreCase("info")) {
-                Warp w = manager.getWarp(player, target);
+                Warp w = manager.getWarp(player.getName(), target);
                 if(w == null)
                     player.sendMessage(_("noWarpName", target));
                 else {
@@ -184,7 +184,7 @@ public class WarpCommand implements CommandExecutor {
                 if(pl == null) {
                     player.sendMessage(_("noPlayer", target));
                 } else {
-                    Warp w = manager.getWarp(player, targetTwo);
+                    Warp w = manager.getWarp(player.getName(), targetTwo);
                     if(w == null) {
                         player.sendMessage(_("noWarpName", targetTwo));
                     } else {

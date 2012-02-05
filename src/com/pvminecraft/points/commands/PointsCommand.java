@@ -37,7 +37,7 @@ public class PointsCommand implements CommandExecutor {
                 cs.sendMessage(_("license"));
                 return true;
             } else if(args[0].equalsIgnoreCase("players")) {
-                HashMap<String, List<Warp>> map = buildTable(plugin.getWarpManager().getAll());
+                HashMap<String, List<Warp>> map = buildTable(plugin.getPlayerManager().getAll());
                 Set<String> players = map.keySet();
                 if(players.size() < 1) {
                     cs.sendMessage(_("noPlayerWarps"));

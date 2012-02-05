@@ -8,19 +8,13 @@ import org.bukkit.entity.Player;
  * @author michael
  */
 public interface WarpManager {
-    void addWarp(String player, Warp warp);
-    
-    void addWarp(Player player, Warp warp);
+    void addWarp(Warp warp);
     
     Warp getWarp(String player, String name);
     
-    Warp getWarp(Player player, String name);
-    
-    void removeWarp(Player player, Warp warp);
+    void removeWarp(Warp warp);
     
     List<Warp> getWarps(String player);
-    
-    List<Warp> getWarps(Player player);
     
     List<Warp> getAll(); 
     

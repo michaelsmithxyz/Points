@@ -9,6 +9,7 @@ import com.pvminecraft.FlatDB.Row;
 import com.pvminecraft.points.Points;
 import com.pvminecraft.points.plugins.PointsPlugin;
 import com.pvminecraft.points.utils.Locations;
+import com.pvminecraft.points.warps.PlayerWarpManager;
 import com.pvminecraft.points.warps.Warp;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,17 +29,18 @@ public class WarpSignManager implements PointsPlugin {
     private SignPlayerListener playerListener;
     
     public WarpSignManager(Points pl) {
+        PlayerWarpManager manager = (PlayerWarpManager) pl.getPlayerManager();
         signs = new HashMap<Location, WarpSign>();
         plugin = pl;
-        blockListener = new SignBlockListener(pl, pl.getWarpManager(), this);
-        playerListener = new SignPlayerListener(pl, pl.getWarpManager(), this);
+        blockListener = new SignBlockListener(pl, manager, this);
+        playerListener = new SignPlayerListener(pl, manager, this);
     }
     
     public void loadSigns(String dir) {
         FlatDB signDb = new FlatDB(dir, "signs.db");
         List<Row> rows = signDb.getAll();
         for(Row r : rows) {
-            WarpSign sign = WarpSign.fromRow(r, plugin, plugin.getWarpManager());
+            WarpSign sign = WarpSign.fromRow(r, plugin, (PlayerWarpManager) plugin.getPlayerManager());
             if(sign == null)
                 continue;
             signs.put(sign.getLocation(), sign);
