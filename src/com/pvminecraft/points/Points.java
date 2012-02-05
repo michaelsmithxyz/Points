@@ -4,8 +4,6 @@ import com.pvminecraft.points.commands.HomeCommand;
 import com.pvminecraft.points.commands.PointsCommand;
 import com.pvminecraft.points.commands.SpawnCommand;
 import com.pvminecraft.points.commands.WarpCommand;
-import com.pvminecraft.points.plugins.PointsPlugin;
-import com.pvminecraft.points.plugins.signs.WarpSignManager;
 import com.pvminecraft.points.warps.GlobalWarpManager;
 import com.pvminecraft.points.warps.PlayerWarpManager;
 import org.bukkit.Location;
@@ -25,14 +23,12 @@ public class Points extends JavaPlugin implements PointsService {
     private SpawnCommand spawnCommand;
     private PlayerWarpManager playerManager;
     private GlobalWarpManager globalManager;
-    private PointsPlugin signPlugin;
     
     @Override
     public void onDisable() {
         homesCommand.saveHomes();
         playerManager.save();
         globalManager.save();
-        signPlugin.disable();
     }
 
     @Override
@@ -47,8 +43,6 @@ public class Points extends JavaPlugin implements PointsService {
         pointsCommand = new PointsCommand(this);
         spawnCommand = new SpawnCommand();
         
-        signPlugin = new WarpSignManager(this);
-        
         homesCommand.loadHomes();
         playerManager.load();
         globalManager.load();
@@ -58,8 +52,6 @@ public class Points extends JavaPlugin implements PointsService {
         getCommand("warp").setExecutor(warpCommand);
         getCommand("points").setExecutor(pointsCommand);
         getCommand("spawn").setExecutor(spawnCommand);
-
-        signPlugin.enable();
         
         sm.register(PointsService.class, this, this, ServicePriority.Normal);
         System.out.println("[Points] Points is now active.");
