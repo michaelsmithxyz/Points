@@ -10,7 +10,7 @@ import com.pvminecraft.points.Points;
 import com.pvminecraft.points.plugins.PointsPlugin;
 import com.pvminecraft.points.utils.Locations;
 import com.pvminecraft.points.warps.PlayerWarpManager;
-import com.pvminecraft.points.warps.Warp;
+import com.pvminecraft.points.warps.OwnedWarp;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -54,7 +54,7 @@ public class WarpSignManager implements PointsPlugin {
         while(it.hasNext()) {
             Map.Entry pairs = (Map.Entry)it.next();
             WarpSign sign = (WarpSign) pairs.getValue();
-            Warp target = sign.getTarget();
+            OwnedWarp target = sign.getTarget();
             String w = target.getOwner() + ";" + target.getName();
             Row row = Locations.locToRow(sign.getLocation(), String.valueOf(sign.hashCode()));
             row.addElement("warp", w);

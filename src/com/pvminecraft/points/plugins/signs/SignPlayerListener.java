@@ -2,7 +2,7 @@ package com.pvminecraft.points.plugins.signs;
 
 import com.pvminecraft.points.Points;
 import com.pvminecraft.points.warps.PlayerWarpManager;
-import com.pvminecraft.points.warps.Warp;
+import com.pvminecraft.points.warps.OwnedWarp;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
@@ -33,7 +33,7 @@ public class SignPlayerListener implements Listener {
             Sign sg = (Sign) bl.getState();
             WarpSign ws = sMgr.getSign(sg);
             if(!(ws == null)) {
-                Warp warp = ws.getTarget();
+                OwnedWarp warp = ws.getTarget();
                 manager.sendTo(event.getPlayer(), warp);
             }
         }

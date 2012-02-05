@@ -7,62 +7,47 @@ package com.pvminecraft.points.warps;
 import com.pvminecraft.FlatDB.Row;
 import com.pvminecraft.points.utils.Locations;
 import org.bukkit.Location;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.Server;
 
 /**
  *
- * @author s0lder
+ * @author michael
  */
 public class Warp {
-    private Location target;
-    private String owner;
-    private boolean visible = false;
+    private Location location;
     private String name;
     
-    public Warp(Location to, String owner, String name) {
-        target = to;
-        this.owner = owner;
+    protected Warp(Location location, String name) {
+        this.location = location;
         this.name = name;
     }
     
-    protected void setOwner(String owner) {
-        this.owner = owner;
-    }
-    
-    public static Warp fromRow(Row row, JavaPlugin pl, String owner) {
-        Location loc = Locations.fromRow(row, pl);
-        boolean vis = "true".equals(row.getElement("visible"))?true:false;
-        return new Warp(loc, owner, row.getIndex(), vis);
-    }
-    
-    public static Row toRow(Warp w) {
-        Row r = Locations.locToRow(w.getTarget(), w.getName());
-        r.addElement("visible", String.valueOf(w.getVisible()));
-        return r;
-    }
-    
-    public Warp(Location to, String owner, String name, boolean vis) {
-        this(to, owner, name);
-        visible = vis;
+    /**
+     * The static factory method for creating warps
+     * 
+     * @param location The target location of the warp
+     * @param name The name of the warp
+     * @return The created warp
+     */
+    public static Warp createWarp(Location location, String name) {
+        return new Warp(location, name);
     }
     
     public Location getTarget() {
-        return target;
-    }
-    
-    public String getOwner() {
-        return owner;
-    }
-    
-    public boolean getVisible() {
-        return visible;
-    }
-    
-    public void setVisible(boolean vis) {
-        visible = vis;
+        return location;
     }
     
     public String getName() {
         return name;
+    }
+    
+    public static Warp fromRow(Row row, Server server) {
+        Location location = Locations.fromRow(row, server);
+        return new Warp(location, row.getIndex());
+    }
+    
+    public static Row toRow(Warp warp) {
+        Row row = Locations.locToRow(warp.getTarget(), warp.getName());
+        return row;
     }
 }

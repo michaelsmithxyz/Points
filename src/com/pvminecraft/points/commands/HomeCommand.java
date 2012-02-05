@@ -65,7 +65,7 @@ public class HomeCommand implements CommandExecutor {
         Location location;
         List<Row> allHomes = db.getAll();
         for(Row row : allHomes) {
-            location = Locations.fromRow(row, plugin);
+            location = Locations.fromRow(row, plugin.getServer());
             homes.put(row.getIndex(), location);
         }
     }

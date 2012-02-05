@@ -1,8 +1,8 @@
 package com.pvminecraft.points.commands;
 
-import com.pvminecraft.points.Points;
 import static com.pvminecraft.points.Messages._;
-import com.pvminecraft.points.warps.GlobalWarp;
+import com.pvminecraft.points.Points;
+import com.pvminecraft.points.warps.OwnedWarp;
 import com.pvminecraft.points.warps.Warp;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +40,7 @@ public class PointsCommand implements CommandExecutor {
                 cs.sendMessage(_("license"));
                 return true;
             } else if(args[0].equalsIgnoreCase("players")) {
-                HashMap<String, List<Warp>> map = buildTable(plugin.getPlayerManager().getAll());
+                HashMap<String, List<OwnedWarp>> map = buildTable(plugin.getPlayerManager().getAll());
                 Set<String> players = map.keySet();
                 if(players.size() < 1) {
                     cs.sendMessage(_("noPlayerWarps"));
@@ -63,7 +63,7 @@ public class PointsCommand implements CommandExecutor {
                 }
                 String name = args[1];
                 Location location = ((Player) cs).getLocation();               
-                GlobalWarp warp = new GlobalWarp(location, "server", name);
+                Warp warp = Warp.createWarp(location, name);
                 plugin.getGlobalManager().addWarp(warp);
                 cs.sendMessage(_("warpCreate", warp.getName(), location.getX(),
                                  location.getY(), location.getZ()));
@@ -86,13 +86,13 @@ public class PointsCommand implements CommandExecutor {
                  " - " + ChatColor.BLUE + "Create a new global warp");
     }
 
-    private HashMap<String, List<Warp>> buildTable(List<Warp> all) {
-        HashMap<String, List<Warp>> ret = new HashMap<String, List<Warp>>();
-        for(Warp warp : all) {
+    private HashMap<String, List<OwnedWarp>> buildTable(List<OwnedWarp> all) {
+        HashMap<String, List<OwnedWarp>> ret = new HashMap<String, List<OwnedWarp>>();
+        for(OwnedWarp warp : all) {
             String player = warp.getOwner();
             if(!(ret.containsKey(player)))
-                ret.put(player, new ArrayList<Warp>());
-            List<Warp> playerWarps = ret.get(player);
+                ret.put(player, new ArrayList<OwnedWarp>());
+            List<OwnedWarp> playerWarps = ret.get(player);
             playerWarps.add(warp);
         }
         return ret;

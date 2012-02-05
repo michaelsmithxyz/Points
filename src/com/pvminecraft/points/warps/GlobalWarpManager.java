@@ -8,7 +8,7 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-public class GlobalWarpManager implements WarpManager {
+public class GlobalWarpManager {
     private Points plugin;
     private List<Warp> globals;
     private String directory;
@@ -19,7 +19,6 @@ public class GlobalWarpManager implements WarpManager {
         globals = new ArrayList<Warp>();
     }
 
-    @Override
     public void addWarp(Warp warp) {
         for(Warp w : globals)
             if(w.getName().equalsIgnoreCase(warp.getName()))
@@ -27,42 +26,32 @@ public class GlobalWarpManager implements WarpManager {
         globals.add(warp);
     }
 
-    @Override
-    public Warp getWarp(String player, String name) {
+    public Warp getWarp(String name) {
         for(Warp warp : globals)
             if(warp.getName().equalsIgnoreCase(name))
                 return warp;
         return null;
     }
 
-    @Override
-    public void removeWarp(Warp warp) {
+    public void removeWarp(OwnedWarp warp) {
         globals.remove(warp);
     }
 
-    @Override
-    public List<Warp> getWarps(String player) {
-        return globals;
-    }
-
-    @Override
     public List<Warp> getAll() {
         return globals;
     }
 
-    @Override
-    public void sendTo(Player player, Warp warp) {
+    public static void sendTo(Player player, Warp warp) {
         Location target = warp.getTarget();
         player.teleport(target);
     }
 
-    @Override
     public void load() {
         FlatDB database = new FlatDB(directory, "globals.db");
         List<Row> rows = database.getAll();
         for(Row row : rows) {
             try {
-                Warp warp = Warp.fromRow(row, plugin, "server");
+                Warp warp = Warp.fromRow(row, plugin.getServer());
                 globals.add(warp);
             } catch (NullPointerException e) {
                 System.err.println("[Points] Error loading global: " + row.getIndex());
@@ -70,7 +59,6 @@ public class GlobalWarpManager implements WarpManager {
         }
     }
 
-    @Override
     public void save() {
         FlatDB database = new FlatDB(directory, "globals.db");
         for(Warp warp : globals) {

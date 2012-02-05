@@ -6,7 +6,7 @@ package com.pvminecraft.points.plugins.signs;
 
 import com.pvminecraft.points.Points;
 import com.pvminecraft.points.warps.PlayerWarpManager;
-import com.pvminecraft.points.warps.Warp;
+import com.pvminecraft.points.warps.OwnedWarp;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
@@ -51,7 +51,7 @@ public class SignBlockListener implements Listener {
         if(!(lines[0].isEmpty() && lines[1].equalsIgnoreCase("Warp") && !lines[2].isEmpty())) {
             return;
         }
-        Warp warp = manager.getWarp(player.getName(), lines[2]);
+        OwnedWarp warp = manager.getWarp(player.getName(), lines[2]);
         if(warp == null) {
             player.sendMessage(ChatColor.RED + "That is not a valid warp!");
             return;

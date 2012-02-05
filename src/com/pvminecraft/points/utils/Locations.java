@@ -6,6 +6,7 @@ package com.pvminecraft.points.utils;
 
 import com.pvminecraft.FlatDB.Row;
 import org.bukkit.Location;
+import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -14,14 +15,14 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author s0lder
  */
 public class Locations {
-    public static Location fromRow(Row row, JavaPlugin plugin) {
+    public static Location fromRow(Row row, Server server) {
         String world = row.getElement("world"),
                 x = row.getElement("x"),
                 y = row.getElement("y"),
                 z = row.getElement("z"),
                 pitch = row.getElement("pitch"),
                 yaw = row.getElement("yaw");  
-        World gameWorld = plugin.getServer().getWorld(world);
+        World gameWorld = server.getWorld(world);
         return new Location(gameWorld, Double.parseDouble(x),
                 Double.parseDouble(y), Double.parseDouble(z), Float.parseFloat(yaw),
                 Float.parseFloat(pitch));
