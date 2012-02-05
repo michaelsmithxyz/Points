@@ -63,7 +63,7 @@ public class WarpCommand implements CommandExecutor {
 
     public boolean newWarp(Player player, String target) {
         Location loc = player.getLocation();
-        OwnedWarp warp = OwnedWarp.createWarp(loc, player.getName(), target);
+        OwnedWarp warp = OwnedWarp.createWarp(loc, target, player.getName());
         playerManager.addWarp(warp);
         player.sendMessage(_("warpCreate", warp.getName(), (int)loc.getX(),
                 (int)loc.getY(), (int)loc.getZ()));
@@ -79,8 +79,9 @@ public class WarpCommand implements CommandExecutor {
         if(w == null) {
             if(player == target)
                 player.sendMessage(_("noWarpName", name));
-            else
+            else {
                 player.sendMessage(_("plNoWarp", target.getName(), name));
+            }
         } else {
             PlayerWarpManager.sendTo(player, w);
         }
@@ -191,8 +192,9 @@ public class WarpCommand implements CommandExecutor {
             String targetTwo = args[2];
             if(action.equalsIgnoreCase("go")) {
                 OwnedWarp w = playerManager.getWarp(target, targetTwo);
-                if(w == null || !w.getVisible())
+                if(w == null || !w.getVisible()) {
                     player.sendMessage(_("plNoWarp", target, targetTwo));
+                }
                 else
                     PlayerWarpManager.sendTo(player, w);
                 return true;

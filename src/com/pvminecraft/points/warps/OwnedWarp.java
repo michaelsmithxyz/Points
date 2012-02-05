@@ -28,10 +28,11 @@ public class OwnedWarp extends Warp {
         String vis = row.getElement("visible");
         if(vis == null)
             return null;
-        OwnedWarp warp = (OwnedWarp) Warp.fromRow(row, server);
-        warp.setOwner(owner);
-        warp.setVisible(Boolean.valueOf(vis));
-        return warp;
+        Warp warp = Warp.fromRow(row, server);
+        OwnedWarp ret = OwnedWarp.createWarp(warp.getTarget(), warp.getName(), owner);
+        ret.setOwner(owner);
+        ret.setVisible(Boolean.valueOf(vis));
+        return ret;
     }
     
     public static Row toRow(OwnedWarp warp) {

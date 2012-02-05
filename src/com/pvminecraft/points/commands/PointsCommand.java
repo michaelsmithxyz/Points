@@ -4,7 +4,6 @@ import static com.pvminecraft.points.Messages._;
 import com.pvminecraft.points.Points;
 import com.pvminecraft.points.warps.OwnedWarp;
 import com.pvminecraft.points.warps.Warp;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -40,7 +39,7 @@ public class PointsCommand implements CommandExecutor {
                 cs.sendMessage(_("license"));
                 return true;
             } else if(args[0].equalsIgnoreCase("players")) {
-                HashMap<String, List<OwnedWarp>> map = buildTable(plugin.getPlayerManager().getAll());
+                HashMap<String, List<OwnedWarp>> map = plugin.getPlayerManager().getTable();
                 Set<String> players = map.keySet();
                 if(players.size() < 1) {
                     cs.sendMessage(_("noPlayerWarps"));
@@ -84,17 +83,5 @@ public class PointsCommand implements CommandExecutor {
                  " - " + ChatColor.BLUE + "Display this help screen");
         cs.sendMessage(ChatColor.GREEN + "/points addglobal " + ChatColor.WHITE +
                  " - " + ChatColor.BLUE + "Create a new global warp");
-    }
-
-    private HashMap<String, List<OwnedWarp>> buildTable(List<OwnedWarp> all) {
-        HashMap<String, List<OwnedWarp>> ret = new HashMap<String, List<OwnedWarp>>();
-        for(OwnedWarp warp : all) {
-            String player = warp.getOwner();
-            if(!(ret.containsKey(player)))
-                ret.put(player, new ArrayList<OwnedWarp>());
-            List<OwnedWarp> playerWarps = ret.get(player);
-            playerWarps.add(warp);
-        }
-        return ret;
     }
 }

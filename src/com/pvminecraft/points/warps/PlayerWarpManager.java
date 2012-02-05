@@ -60,6 +60,10 @@ public class PlayerWarpManager {
             ret.addAll(warps.get(key));
         return ret;
     }
+    
+    public HashMap<String, List<OwnedWarp>> getTable() {
+        return warps;
+    }
 
     public static void sendTo(Player player, OwnedWarp warp) {
         if(warp == null)
