@@ -34,8 +34,8 @@
         <tstamp />
         <mkdir dir="${dist}" />
         <jar basedir="${classes}" destfile="${dist}/${name}.jar">
-            <zipgroupfileset dir="lib" includes="FlatDB.jar" />
             <manifest>
+                <attribute name="Class-Path" value="../lib/FlatDB.jar" />
                 <attribute name="Built-By" value="${user.name}" />
                 <attribute name="Built-Date" value="${TODAY}" />
             </manifest>
