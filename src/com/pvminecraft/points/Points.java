@@ -4,8 +4,10 @@ import com.pvminecraft.points.commands.HomeCommand;
 import com.pvminecraft.points.commands.PointsCommand;
 import com.pvminecraft.points.commands.SpawnCommand;
 import com.pvminecraft.points.commands.WarpCommand;
+import com.pvminecraft.points.utils.Downloader;
 import com.pvminecraft.points.warps.GlobalWarpManager;
 import com.pvminecraft.points.warps.PlayerWarpManager;
+import java.io.File;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.ServicePriority;
@@ -23,6 +25,7 @@ public class Points extends JavaPlugin implements PointsService {
     private SpawnCommand spawnCommand;
     private PlayerWarpManager playerManager;
     private GlobalWarpManager globalManager;
+    public static final String dbURL = "https://github.com/s0lder/FlatDB/blob/master/download/FlatDB.jar?raw=true";
     
     @Override
     public void onDisable() {
@@ -33,6 +36,11 @@ public class Points extends JavaPlugin implements PointsService {
 
     @Override
     public void onEnable() {
+        /* if(!checkLibs("lib/")) {
+            System.err.println("[Points] Could not download required libraries!");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        } */
         ServicesManager sm = getServer().getServicesManager();
         
         Messages.buildMessages();
@@ -76,5 +84,19 @@ public class Points extends JavaPlugin implements PointsService {
     @Override
     public GlobalWarpManager getGlobalManager() {
         return globalManager;
+    }
+
+    private boolean checkLibs(String dir) {
+        //Check for lib/
+        File lib = new File(dir);
+        if(!lib.exists())
+            lib.mkdirs();
+        //Check for FlatDB.jar
+        File jar = new File(dir, "FlatDB.jar");
+        if(!jar.exists()){
+            System.out.println("[Points] Downloading FlatDB.jar");
+            return Downloader.getFile(dbURL, jar.getPath());
+        }
+        return true;
     }
 }

@@ -1,14 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.pvminecraft.points.utils;
 
-import com.pvminecraft.FlatDB.Row;
+import com.pvminecraft.points.db.Row;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
-import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  *

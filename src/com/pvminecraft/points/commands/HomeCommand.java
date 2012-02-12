@@ -1,9 +1,10 @@
 package com.pvminecraft.points.commands;
 
 import static com.pvminecraft.points.Messages._;
-import com.pvminecraft.FlatDB.FlatDB;
-import com.pvminecraft.FlatDB.Row;
+import static com.pvminecraft.points.Messages._;
 import com.pvminecraft.points.Points;
+import com.pvminecraft.points.db.FlatDB;
+import com.pvminecraft.points.db.Row;
 import com.pvminecraft.points.utils.Locations;
 import java.util.HashMap;
 import java.util.Iterator;

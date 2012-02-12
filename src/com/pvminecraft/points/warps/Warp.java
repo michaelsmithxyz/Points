@@ -4,7 +4,7 @@
  */
 package com.pvminecraft.points.warps;
 
-import com.pvminecraft.FlatDB.Row;
+import com.pvminecraft.points.db.Row;
 import com.pvminecraft.points.utils.Locations;
 import org.bukkit.Location;
 import org.bukkit.Server;
