@@ -1,6 +1,6 @@
 package com.pvminecraft.points.utils;
 
-import com.pvminecraft.points.db.Row;
+import com.pvminecraft.FlatDB.Row;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;

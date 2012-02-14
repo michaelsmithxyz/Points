@@ -4,6 +4,7 @@ import com.pvminecraft.points.commands.HomeCommand;
 import com.pvminecraft.points.commands.PointsCommand;
 import com.pvminecraft.points.commands.SpawnCommand;
 import com.pvminecraft.points.commands.WarpCommand;
+import com.pvminecraft.points.utils.ClassPathAdder;
 import com.pvminecraft.points.utils.Downloader;
 import com.pvminecraft.points.warps.GlobalWarpManager;
 import com.pvminecraft.points.warps.PlayerWarpManager;
@@ -36,11 +37,11 @@ public class Points extends JavaPlugin implements PointsService {
 
     @Override
     public void onEnable() {
-        /* if(!checkLibs("lib/")) {
+        if(!checkLibs("lib/")) {
             System.err.println("[Points] Could not download required libraries!");
             getServer().getPluginManager().disablePlugin(this);
             return;
-        } */
+        }
         ServicesManager sm = getServer().getServicesManager();
         
         Messages.buildMessages();
@@ -95,7 +96,9 @@ public class Points extends JavaPlugin implements PointsService {
         File jar = new File(dir, "FlatDB.jar");
         if(!jar.exists()){
             System.out.println("[Points] Downloading FlatDB.jar");
-            return Downloader.getFile(dbURL, jar.getPath());
+            boolean down = Downloader.getFile(dbURL, jar.getPath());
+            boolean load = ClassPathAdder.addFile(jar);
+            return down && load;
         }
         return true;
     }

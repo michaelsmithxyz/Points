@@ -1,8 +1,8 @@
 package com.pvminecraft.points.warps;
 
+import com.pvminecraft.FlatDB.FlatDB;
+import com.pvminecraft.FlatDB.Row;
 import com.pvminecraft.points.Points;
-import com.pvminecraft.points.db.FlatDB;
-import com.pvminecraft.points.db.Row;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Location;
