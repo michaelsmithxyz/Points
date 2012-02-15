@@ -7,4 +7,6 @@ public interface PointsService {
     GlobalWarpManager getGlobalManager();
     
     PlayerWarpManager getPlayerManager();
+    
+    WarpsService getWarpsService();
 }

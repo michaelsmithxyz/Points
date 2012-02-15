@@ -26,6 +26,7 @@ public class Points extends JavaPlugin implements PointsService {
     private SpawnCommand spawnCommand;
     private PlayerWarpManager playerManager;
     private GlobalWarpManager globalManager;
+    private WarpsService warpsService;
     public static final String dbURL = "https://github.com/s0lder/FlatDB/blob/master/download/FlatDB.jar?raw=true";
     
     @Override
@@ -51,6 +52,7 @@ public class Points extends JavaPlugin implements PointsService {
         warpCommand = new WarpCommand(this);
         pointsCommand = new PointsCommand(this);
         spawnCommand = new SpawnCommand();
+        warpsService = new WarpsService();
         
         homesCommand.loadHomes();
         playerManager.load();
@@ -85,6 +87,11 @@ public class Points extends JavaPlugin implements PointsService {
     @Override
     public GlobalWarpManager getGlobalManager() {
         return globalManager;
+    }
+    
+    @Override
+    public WarpsService getWarpsService() {
+        return warpsService;
     }
 
     private boolean checkLibs(String dir) {
