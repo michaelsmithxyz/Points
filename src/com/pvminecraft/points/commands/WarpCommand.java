@@ -40,7 +40,7 @@ public class WarpCommand implements CommandExecutor {
             return true;
         }
         if(player.equalsIgnoreCase(reciever.getName())) {
-            if(plWarps == null)
+            if(plWarps == null || plWarps.isEmpty())
                 reciever.sendMessage(_("youNoWarps"));
             else {
                 reciever.sendMessage(_("warpList"));
