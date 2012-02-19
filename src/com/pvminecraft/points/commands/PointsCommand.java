@@ -77,7 +77,7 @@ public class PointsCommand implements CommandExecutor {
                  " - " + ChatColor.BLUE + "Display all players who have warps");
         cs.sendMessage(ChatColor.GREEN + "/points ? " + ChatColor.WHITE +
                  " - " + ChatColor.BLUE + "Display this help screen");
-        cs.sendMessage(ChatColor.GREEN + "/points addglobal " + ChatColor.WHITE +
+        cs.sendMessage(ChatColor.GREEN + "/points addglobal [name]" + ChatColor.WHITE +
                  " - " + ChatColor.BLUE + "Create a new global warp");
     }
 }
