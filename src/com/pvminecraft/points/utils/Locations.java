@@ -5,10 +5,6 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
 
-/**
- *
- * @author s0lder
- */
 public class Locations {
     public static Location fromRow(Row row, Server server) {
         String world = row.getElement("world"),

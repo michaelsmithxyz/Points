@@ -12,12 +12,37 @@ public class OwnedWarp extends Warp {
         super(location, name);
     }
     
+    /**
+     * A factory method to create a new warp with ownership.
+     * 
+     * @param location the location that the warp should point to
+     * 
+     * @param name the name of the warp
+     * 
+     * @param owner the owner of the warp
+     * 
+     * @return the newly created warp
+     */
     public static OwnedWarp createWarp(Location location, String name, String owner) {
         OwnedWarp warp = new OwnedWarp(location, name);
         warp.setOwner(owner);
         return warp;
     }
     
+    /**
+     * A factory method to create a new warp with ownership. Includes the ability
+     * to set visibility.
+     * 
+     * @param location the location that the warp should point to
+     * 
+     * @param name the name of the warp
+     * 
+     * @param owner the owner of the warp
+     * 
+     * @param visible the visibility of the warp (public or private)
+     * 
+     * @return 
+     */
     public static OwnedWarp createWarp(Location location, String name, String owner, boolean visible) {
         OwnedWarp warp = OwnedWarp.createWarp(location, name, owner);
         warp.setVisible(visible);
@@ -41,18 +66,38 @@ public class OwnedWarp extends Warp {
         return row;
     }
     
+    /**
+     * Sets the owner of the warp.
+     * 
+     * @param owner the new owner
+     */
     public void setOwner(String owner) {
         this.owner = owner;
     }
     
+    /**
+     * Returns the owner of the warp
+     * 
+     * @return the warp's owner
+     */
     public String getOwner() {
         return owner;
     }
     
+    /**
+     * Returns the visibility of the warp.
+     * 
+     * @return the warp's visibility
+     */
     public boolean getVisible() {
         return visible;
     }
     
+    /**
+     * Sets the visibility of the warp.
+     * 
+     * @param vis the new visibility
+     */
     public void setVisible(boolean vis) {
         visible = vis;
     }

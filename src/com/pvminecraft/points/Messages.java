@@ -7,10 +7,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Properties;
 
-/**
- *
- * @author s0lder
- */
 public class Messages {
     private static HashMap<String, MessageFormat> messages;
 
