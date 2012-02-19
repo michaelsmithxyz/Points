@@ -34,6 +34,8 @@ public class SpawnCommand implements CommandExecutor {
                     Location newLoc = player.getLocation();
                     newLoc.getWorld().setSpawnLocation(newLoc.getBlockX(),
                             newLoc.getBlockY(), newLoc.getBlockZ());
+                    player.sendMessage(Messages._("spawnSet"));
+                    return true;
                 }
             } else {
                 Points.teleportTo(player, player.getLocation().getWorld().getSpawnLocation());
