@@ -1,6 +1,6 @@
 package com.pvminecraft.points.commands;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,15 +14,10 @@ public class Command {
     
     public Command(String base, JavaPlugin plugin) {
         this.base = base;
-        this.execs = new ArrayList<ArgumentSet>();
+        this.execs = new LinkedList<ArgumentSet>();
         this.pattern = "^" + base;
         this.plugin = plugin;
-    }
-    
-    public void addHelp(CommandHelp help) {
-        this.help = help;
-        for(ArgumentSet arg : execs)
-            this.help.addEntry(arg.getHelp());
+        this.help = new CommandHelp(this);
     }
     
     public String getPattern() {
@@ -35,6 +30,11 @@ public class Command {
     
     public void addArgument(ArgumentSet arg) {
         execs.add(arg);
+        help.addEntry(arg.getHelp());
+    }
+    
+    public boolean hasHelp() {
+        return help != null && help.hasEntries();
     }
     
     public boolean execute(CommandSender sender, String command, String[] args) {
@@ -48,7 +48,7 @@ public class Command {
     }
     
     public boolean executeHelp(CommandSender sender, String[] args) {
-        if(!help.hasEntries()) return false;
+        if(!hasHelp()) return false;
         if(args.length > 1) {
             try {
                 help.displayHelp(sender, Integer.parseInt(args[1]));

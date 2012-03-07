@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 public class CommandHelp {
     private List<Pair<String, String>> entries;
     private Command command;
-    public static final int ITEMS_PER_PAGE = 10;
+    public static final int ITEMS_PER_PAGE = 7;
     
     public CommandHelp(Command command) {
         this.command = command;
@@ -30,17 +30,18 @@ public class CommandHelp {
     }
     
     public void displayHelp(CommandSender sender, int page) {
-        int numPages = (int) Math.ceil(entries.size() / ITEMS_PER_PAGE);
+        if(entries.isEmpty()) return;
+        int numPages = (int) Math.ceil((double) entries.size() / (double) ITEMS_PER_PAGE);
         if(page < 1) page = 1;
         if(page > numPages) page = numPages;
         int offset = (page - 1) * ITEMS_PER_PAGE;
-        sender.sendMessage(ChatColor.YELLOW + "Help for /" + command.getBase() + ":");
+        sender.sendMessage(ChatColor.YELLOW + "-- Help for /" + command.getBase() + ": --");
         for(int i = offset; i < offset + ITEMS_PER_PAGE && i < entries.size(); i++) {
             String not = entries.get(i).a;
             String des = entries.get(i).b;
             sender.sendMessage(ChatColor.BLUE + not + ChatColor.WHITE + " - " +
                     ChatColor.GREEN + des);
         }
-        sender.sendMessage(ChatColor.YELLOW + "Page " + page + " of " + numPages);
+        sender.sendMessage(ChatColor.YELLOW + "-- Page " + page + " of " + numPages + " --");
     }
 }

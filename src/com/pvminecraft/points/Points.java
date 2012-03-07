@@ -1,9 +1,12 @@
 package com.pvminecraft.points;
 
 import com.pvminecraft.points.commands.*;
+import com.pvminecraft.points.commands.home.HomeDefault;
+import com.pvminecraft.points.commands.home.HomeSet;
 import com.pvminecraft.points.commands.spawn.SpawnBed;
 import com.pvminecraft.points.commands.spawn.SpawnDefault;
 import com.pvminecraft.points.commands.spawn.SpawnSet;
+import com.pvminecraft.points.homes.HomeManager;
 import com.pvminecraft.points.utils.ClassPathAdder;
 import com.pvminecraft.points.utils.Downloader;
 import com.pvminecraft.points.warps.GlobalWarpManager;
@@ -18,16 +21,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Points extends JavaPlugin implements PointsService {
     private CommandHandler commands;
-    private HomeCommand homesCommand;
     private WarpCommand warpCommand;
     private PointsCommand pointsCommand;
+    private HomeManager homeManager;
     private PlayerWarpManager playerManager;
     private GlobalWarpManager globalManager;
     public static final String dbURL = "https://github.com/s0lder/FlatDB/blob/master/download/FlatDB.jar?raw=true";
     
     @Override
     public void onDisable() {
-        homesCommand.saveHomes();
         playerManager.save();
         globalManager.save();
     }
@@ -40,35 +42,47 @@ public class Points extends JavaPlugin implements PointsService {
             return;
         }
         ServicesManager sm = getServer().getServicesManager();
-        commands = new CommandHandler(this);
-        
         Messages.buildMessages();
+        homeManager = new HomeManager(this);
+        playerManager = new PlayerWarpManager(this);
+        globalManager = new GlobalWarpManager(this);
         
+        setupCommands();
+        warpCommand = new WarpCommand(this);
+        pointsCommand = new PointsCommand(this);
+        
+        homeManager.load();
+        playerManager.load();
+        globalManager.load();
+        
+        sm.register(PointsService.class, this, this, ServicePriority.Normal);
+        System.out.println("[Points] Points is now active.");
+    }
+    
+    private void setupCommands() {
+        commands = new CommandHandler(this);
+    
         Command spawnCommand = new Command("spawn", this);
         ArgumentSet spawnDefault = new SpawnDefault(spawnCommand, "", this, new Permission("points.spawn"));
         ArgumentSet spawnBed = new SpawnBed(spawnCommand, "bed", this, new Permission("points.spawn"));
         ArgumentSet spawnSet = new SpawnSet(spawnCommand, "set", this, new Permission("points.admin"));
-        spawnCommand.addArgument(spawnSet);
         spawnCommand.addArgument(spawnDefault);
         spawnCommand.addArgument(spawnBed);
+        spawnCommand.addArgument(spawnSet);
+        commands.addCommand(spawnCommand);
         
-        playerManager = new PlayerWarpManager(this);
-        globalManager = new GlobalWarpManager(this);
-        homesCommand = new HomeCommand(this);
-        warpCommand = new WarpCommand(this);
-        pointsCommand = new PointsCommand(this);
+        Command setHome = new Command("sethome", this);
+        ArgumentSet homeSet = new HomeSet(setHome, "", this, new Permission("points.home"));
+        setHome.addArgument(homeSet);
+        Command homeCommand = new Command("home", this);
+        ArgumentSet home = new HomeDefault(setHome, "", this, new Permission("points.home"));
+        homeCommand.addArgument(home);
+        commands.addCommand(setHome);
+        commands.addCommand(homeCommand);
         
-        homesCommand.loadHomes();
-        playerManager.load();
-        globalManager.load();
-        
-        getCommand("home").setExecutor(homesCommand);
-        getCommand("sethome").setExecutor(homesCommand);
         getCommand("warp").setExecutor(warpCommand);
         getCommand("points").setExecutor(pointsCommand);
-        
-        sm.register(PointsService.class, this, this, ServicePriority.Normal);
-        System.out.println("[Points] Points is now active.");
+        getCommand("spawn").setExecutor(commands);
     }
     
     public static void teleportTo(Player pl, Location loc) {
@@ -90,6 +104,10 @@ public class Points extends JavaPlugin implements PointsService {
     @Override
     public GlobalWarpManager getGlobalManager() {
         return globalManager;
+    }
+    
+    public HomeManager getHomeManager() {
+        return homeManager;
     }
 
     private boolean checkLibs(String dir) {

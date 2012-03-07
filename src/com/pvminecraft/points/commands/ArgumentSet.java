@@ -8,11 +8,11 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class ArgumentSet {
-    private Pattern pattern;
-    private String regex;
-    private Permission[] perms;
-    private Command base;
-    private JavaPlugin plugin;
+    protected Pattern pattern;
+    protected String regex;
+    protected Permission[] perms;
+    protected Command base;
+    protected JavaPlugin plugin;
     
     public ArgumentSet(Command base, String pat, JavaPlugin plugin, Permission ... perms)
             throws PatternSyntaxException {
