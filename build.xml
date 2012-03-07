@@ -17,7 +17,6 @@
     </target>
 
     <target name="build">
-        <buildnumber />
         <mkdir dir="${classes}" />
         <copy todir="${classes}">
             <fileset dir="${src}">
