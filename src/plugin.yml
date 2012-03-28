@@ -5,19 +5,19 @@ version: 1.6.1
 commands:
     home:
         description: Go to your home point
-        usage: /home
+        usage: /<command>
     sethome:
         description: Sets your home point to your current location
-        usage: /sethome
+        usage: /<command>
     spawn:
         description: Teleports you to the spawn point
-        usage: /spawn
+        usage: /<command>
     warp:
         description: Allows warp functionality
-        usage: /warp [operation] [target]
+        usage: /<command> [operation] [target]
     points:
         description: Allows the querying of plugin information
-        usage: /points [operation]
+        usage: /<command> [operation]
 
 permissions:
     points.*:

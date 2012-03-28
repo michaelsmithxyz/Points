@@ -32,6 +32,7 @@ public class Points extends JavaPlugin implements PointsService {
     public void onDisable() {
         playerManager.save();
         globalManager.save();
+        homeManager.save();
     }
 
     @Override
@@ -83,6 +84,8 @@ public class Points extends JavaPlugin implements PointsService {
         getCommand("warp").setExecutor(warpCommand);
         getCommand("points").setExecutor(pointsCommand);
         getCommand("spawn").setExecutor(commands);
+        getCommand("home").setExecutor(commands);
+        getCommand("sethome").setExecutor(commands);
     }
     
     public static void teleportTo(Player pl, Location loc) {
