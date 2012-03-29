@@ -45,7 +45,7 @@ public class WarpInfo extends ArgumentSet {
 
     @Override
     public Pair<String, String> getHelp() {
-        return new Pair<String, String>("/warp find", "Reset your compass target to spawn");
+        return new Pair<String, String>("/warp info [name]", "Show information about a warp");
     }
 
 }

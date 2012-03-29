@@ -6,12 +6,14 @@ import com.pvminecraft.points.commands.home.HomeSet;
 import com.pvminecraft.points.commands.spawn.SpawnBed;
 import com.pvminecraft.points.commands.spawn.SpawnDefault;
 import com.pvminecraft.points.commands.spawn.SpawnSet;
+import com.pvminecraft.points.commands.warp.*;
 import com.pvminecraft.points.homes.HomeManager;
 import com.pvminecraft.points.utils.ClassPathAdder;
 import com.pvminecraft.points.utils.Downloader;
 import com.pvminecraft.points.warps.GlobalWarpManager;
 import com.pvminecraft.points.warps.PlayerWarpManager;
 import java.io.File;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
@@ -21,8 +23,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Points extends JavaPlugin implements PointsService {
     private CommandHandler commands;
-    private WarpCommand warpCommand;
-    private PointsCommand pointsCommand;
     private HomeManager homeManager;
     private PlayerWarpManager playerManager;
     private GlobalWarpManager globalManager;
@@ -48,13 +48,10 @@ public class Points extends JavaPlugin implements PointsService {
         playerManager = new PlayerWarpManager(this);
         globalManager = new GlobalWarpManager(this);
         
-        setupCommands();
-        warpCommand = new WarpCommand(this);
-        pointsCommand = new PointsCommand(this);
-        
         homeManager.load();
         playerManager.load();
         globalManager.load();
+        setupCommands();
         
         sm.register(PointsService.class, this, this, ServicePriority.Normal);
         System.out.println("[Points] Points is now active.");
@@ -81,8 +78,35 @@ public class Points extends JavaPlugin implements PointsService {
         commands.addCommand(setHome);
         commands.addCommand(homeCommand);
         
-        getCommand("warp").setExecutor(warpCommand);
-        getCommand("points").setExecutor(pointsCommand);
+        Command warpCommand = new Command("warp", this);
+        Permission warpPerm = new Permission("points.warp");
+        ArgumentSet warpNew = new WarpNew(warpCommand, "new \\w+$", this, warpPerm);
+        ArgumentSet warpDelete = new WarpDelete(warpCommand, "delete \\w+$", this, warpPerm);
+        ArgumentSet warpGo = new WarpGo(warpCommand, "go \\w+$", this, warpPerm);
+        ArgumentSet warpGoPlayer = new WarpGoPlayer(warpCommand, "go \\w+ \\w+$", this, warpPerm);
+        ArgumentSet warpGlobal = new WarpGlobal(warpCommand, "global \\w+$", this, warpPerm);
+        ArgumentSet warpPublic = new WarpPublic(warpCommand, "public \\w+$", this, warpPerm);
+        ArgumentSet warpList = new WarpList(warpCommand, "list", this, warpPerm);
+        ArgumentSet warpListPlayer = new WarpListPlayer(warpCommand, "list \\w+$", this, warpPerm);
+        ArgumentSet warpInfo = new WarpInfo(warpCommand, "info \\w+$", this, warpPerm);
+        ArgumentSet warpFind = new WarpFind(warpCommand, "find \\w+$", this, warpPerm);
+        ArgumentSet warpFindReset = new WarpFindReset(warpCommand, "find", this, warpPerm);
+        warpCommand.addArgument(warpNew);
+        warpCommand.addArgument(warpDelete);
+        warpCommand.addArgument(warpGo);
+        warpCommand.addArgument(warpGoPlayer);
+        warpCommand.addArgument(warpGlobal);
+        warpCommand.addArgument(warpPublic);
+        warpCommand.addArgument(warpList);
+        warpCommand.addArgument(warpListPlayer);
+        warpCommand.addArgument(warpInfo);
+        warpCommand.addArgument(warpFind);
+        warpCommand.addArgument(warpFindReset);
+        
+        commands.addCommand(warpCommand);
+        
+        getCommand("warp").setExecutor(commands);
+        // getCommand("points").setExecutor(pointsCommand);
         getCommand("spawn").setExecutor(commands);
         getCommand("home").setExecutor(commands);
         getCommand("sethome").setExecutor(commands);

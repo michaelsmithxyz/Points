@@ -7,7 +7,6 @@ import com.pvminecraft.points.commands.Command;
 import com.pvminecraft.points.utils.Pair;
 import com.pvminecraft.points.warps.OwnedWarp;
 import com.pvminecraft.points.warps.PlayerWarpManager;
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
@@ -27,7 +26,7 @@ public class WarpGo extends ArgumentSet {
         }
         Player player = (Player) sender;
         PlayerWarpManager manager = ((Points) plugin).getPlayerManager();
-        if(args.length <= 3) {
+        if(args.length >= 3) {
             String otherPlayer = args[1];
             String warp = args[2];
             OwnedWarp target = manager.getWarp(otherPlayer, warp);

@@ -17,14 +17,18 @@ public class CommandHandler implements CommandExecutor {
     }
     
     public void addCommand(com.pvminecraft.points.commands.Command command) {
+        System.out.println("[Points] Adding command: " + command.getBase());
         this.cmds.add(command);
     }
 
     @Override
     public boolean onCommand(CommandSender cs, Command cmnd, String label, String[] args) {
         for(com.pvminecraft.points.commands.Command cmd : cmds)
-            if(label.equalsIgnoreCase(cmd.getBase()))
+            if(label.equalsIgnoreCase(cmd.getBase())) {
                 cmd.execute(cs, toFull(label, args), args);
+                return true;
+            }
+        System.out.println("[Points] ERROR: No match for command: " + cmnd.getLabel());
         return true;
     }
     

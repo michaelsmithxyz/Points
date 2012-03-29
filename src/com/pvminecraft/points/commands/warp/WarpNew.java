@@ -35,7 +35,7 @@ public class WarpNew extends ArgumentSet {
 
     @Override
     public Pair<String, String> getHelp() {
-        return new Pair<String, String>("/warp new [name]", "Creates a new warp at you current position");
+        return new Pair<String, String>("/warp new [name]", "Create a new warp");
     }
 
 }

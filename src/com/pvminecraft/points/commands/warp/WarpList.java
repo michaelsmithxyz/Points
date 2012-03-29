@@ -34,9 +34,13 @@ public class WarpList extends ArgumentSet {
             String other = args[1];
             if(other.equalsIgnoreCase("globals")) {
                 List<Warp> globals = globalManager.getAll();
-                player.sendMessage(_("globalList"));
-                for(Warp warp : globals)
-                    player.sendMessage(_("globalItem", warp.getName()));
+                if(globals.isEmpty() || globals == null) {
+                    player.sendMessage(_("noGlobalWarps"));
+                } else {
+                    player.sendMessage(_("globalList"));
+                    for(Warp warp : globals)
+                        player.sendMessage(_("globalItem", warp.getName(), "global"));
+                }
             } else {
                 List<OwnedWarp> warps = playerManager.getWarps(other);
                 if(warps == null || warps.isEmpty()) {
@@ -45,7 +49,7 @@ public class WarpList extends ArgumentSet {
                     player.sendMessage(_("warpList"));
                     for(OwnedWarp warp : warps)
                         if(warp.getVisible())
-                            player.sendMessage(_("warpItem", warp.getVisible()));
+                            player.sendMessage(_("warpItem", warp.getName(), warp.getVisible()?"public":"private"));
                 }
             }
         } else {
@@ -55,7 +59,7 @@ public class WarpList extends ArgumentSet {
             } else {
                 player.sendMessage(_("warpList"));
                 for(OwnedWarp warp : warps)
-                    player.sendMessage(_("warpItem", warp.getVisible()));
+                    player.sendMessage(_("warpItem", warp.getName(), warp.getVisible()?"public":"private"));
             }
         }
         return true;
