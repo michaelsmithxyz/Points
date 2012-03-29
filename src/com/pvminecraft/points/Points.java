@@ -1,6 +1,8 @@
 package com.pvminecraft.points;
 
-import com.pvminecraft.points.commands.*;
+import com.pvminecraft.points.commands.ArgumentSet;
+import com.pvminecraft.points.commands.Command;
+import com.pvminecraft.points.commands.CommandHandler;
 import com.pvminecraft.points.commands.home.HomeDefault;
 import com.pvminecraft.points.commands.home.HomeSet;
 import com.pvminecraft.points.commands.spawn.SpawnBed;
@@ -13,8 +15,11 @@ import com.pvminecraft.points.utils.Downloader;
 import com.pvminecraft.points.warps.GlobalWarpManager;
 import com.pvminecraft.points.warps.PlayerWarpManager;
 import java.io.File;
-import org.bukkit.ChatColor;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import org.bukkit.Location;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.ServicePriority;
@@ -26,7 +31,9 @@ public class Points extends JavaPlugin implements PointsService {
     private HomeManager homeManager;
     private PlayerWarpManager playerManager;
     private GlobalWarpManager globalManager;
-    public static final String dbURL = "https://github.com/s0lder/FlatDB/blob/master/download/FlatDB.jar?raw=true";
+    public static final String dbURL = "https://github.com/downloads/s0lder/FlatDB/FlatDB.jar";
+    private YamlConfiguration config;
+    private File confFile;
     
     @Override
     public void onDisable() {
@@ -42,6 +49,11 @@ public class Points extends JavaPlugin implements PointsService {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+        if(!getDataFolder().exists())
+            getDataFolder().mkdirs();
+        
+        setupConfig();
+        
         ServicesManager sm = getServer().getServicesManager();
         Messages.buildMessages();
         homeManager = new HomeManager(this);
@@ -55,6 +67,20 @@ public class Points extends JavaPlugin implements PointsService {
         
         sm.register(PointsService.class, this, this, ServicePriority.Normal);
         System.out.println("[Points] Points is now active.");
+    }
+    
+    private void setupConfig() {
+        try {
+            confFile = new File(getDataFolder().getPath() + "config.yml");
+            config = new YamlConfiguration();
+            config.load(getDataFolder().getPath() + "config.yml");
+        } catch(FileNotFoundException e) {
+            
+        } catch(IOException e) {
+            
+        } catch(InvalidConfigurationException e) {
+            
+        }
     }
     
     private void setupCommands() {
@@ -87,6 +113,7 @@ public class Points extends JavaPlugin implements PointsService {
         ArgumentSet warpGlobal = new WarpGlobal(warpCommand, "global \\w+$", this, warpPerm);
         ArgumentSet warpPublic = new WarpPublic(warpCommand, "public \\w+$", this, warpPerm);
         ArgumentSet warpList = new WarpList(warpCommand, "list", this, warpPerm);
+        ArgumentSet warpListGlobal = new WarpListGlobal(warpCommand, "list globals$", this, warpPerm);
         ArgumentSet warpListPlayer = new WarpListPlayer(warpCommand, "list \\w+$", this, warpPerm);
         ArgumentSet warpInfo = new WarpInfo(warpCommand, "info \\w+$", this, warpPerm);
         ArgumentSet warpFind = new WarpFind(warpCommand, "find \\w+$", this, warpPerm);
@@ -97,6 +124,7 @@ public class Points extends JavaPlugin implements PointsService {
         warpCommand.addArgument(warpGoPlayer);
         warpCommand.addArgument(warpGlobal);
         warpCommand.addArgument(warpPublic);
+        warpCommand.addArgument(warpListGlobal);
         warpCommand.addArgument(warpList);
         warpCommand.addArgument(warpListPlayer);
         warpCommand.addArgument(warpInfo);

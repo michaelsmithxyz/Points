@@ -1,0 +1,11 @@
+features:
+    warps:
+        enabled: true
+        social: true
+        globals: true
+        compass: true
+    spawn:
+        enabled: true
+        bed: true
+    home:
+        enabled: true
