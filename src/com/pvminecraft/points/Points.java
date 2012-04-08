@@ -5,6 +5,9 @@ import com.pvminecraft.points.commands.Command;
 import com.pvminecraft.points.commands.CommandHandler;
 import com.pvminecraft.points.commands.home.HomeDefault;
 import com.pvminecraft.points.commands.home.HomeSet;
+import com.pvminecraft.points.commands.points.PointsAbout;
+import com.pvminecraft.points.commands.points.PointsAddGlobal;
+import com.pvminecraft.points.commands.points.PointsPlayers;
 import com.pvminecraft.points.commands.spawn.SpawnBed;
 import com.pvminecraft.points.commands.spawn.SpawnDefault;
 import com.pvminecraft.points.commands.spawn.SpawnSet;
@@ -156,6 +159,17 @@ public class Points extends JavaPlugin implements PointsService {
             commands.addCommand(warpCommand);
             getCommand("warp").setExecutor(commands);
         }
+        
+        Command pointsCommand = new Command("points", this);
+        Permission pointsPerm = new Permission("points.admin");
+        ArgumentSet pointsAbout = new PointsAbout(pointsCommand, "about", this, pointsPerm);
+        pointsCommand.addArgument(pointsAbout);
+        ArgumentSet pointsAddGlobal = new PointsAddGlobal(pointsCommand, "addglobal \\w+$", this, pointsPerm);
+        pointsCommand.addArgument(pointsAddGlobal);
+        ArgumentSet pointsPlayers = new PointsPlayers(pointsCommand, "players", this, pointsPerm);
+        pointsCommand.addArgument(pointsPlayers);
+        commands.addCommand(pointsCommand);
+        getCommand("points").setExecutor(commands);
     }
     
     public static void teleportTo(Player pl, Location loc) {
