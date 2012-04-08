@@ -71,13 +71,14 @@ public class Points extends JavaPlugin implements PointsService {
     
     private void setupConfig() {
         try {
-            confFile = new File(getDataFolder().getPath() + "config.yml");
+            confFile = new File(getDataFolder().getPath(), "config.yml");
             config = new YamlConfiguration();
-            config.load(getDataFolder().getPath() + "config.yml");
+            config.load(confFile.getPath());
             Config.load(config);
+            System.out.println("[Points] Loaded configuration");
         } catch(FileNotFoundException e) {
             System.out.println("[Points] Couldn't find config.yml... Generating...");
-            if(Downloader.getFile(getClassLoader().getResource("resources/config.yml"), confFile.getPath())) {
+            if(Downloader.copyFile(Points.class.getResourceAsStream("resources/config.yml"), confFile.getPath())) {
                 System.out.println("[Points] config.yml has been generated!");
                 setupConfig();
             } else {
@@ -111,7 +112,7 @@ public class Points extends JavaPlugin implements PointsService {
             ArgumentSet homeSet = new HomeSet(setHome, "", this, new Permission("points.home"));
             setHome.addArgument(homeSet);
             Command homeCommand = new Command("home", this);
-            ArgumentSet home = new HomeDefault(setHome, "", this, new Permission("points.home"));
+            ArgumentSet home = new HomeDefault(homeCommand, "", this, new Permission("points.home"));
             homeCommand.addArgument(home);
             commands.addCommand(setHome);
             commands.addCommand(homeCommand);

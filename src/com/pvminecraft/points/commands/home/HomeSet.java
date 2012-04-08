@@ -26,7 +26,7 @@ public class HomeSet extends ArgumentSet {
         Player player = (Player) sender;
         Location loc = player.getLocation();
         ((Points) plugin).getHomeManager().setHome(player.getName(), loc);
-        player.sendMessage(_("setHome", loc.getX(), loc.getY(), loc.getZ()));
+        player.sendMessage(_("setHome", (int)loc.getX(), (int)loc.getY(), (int)loc.getZ()));
         return true;
     }
 
