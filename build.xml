@@ -31,6 +31,23 @@
             deprecation="on" />
     </target>
 
+    <target name="build-debug">
+        <mkdir dir="${classes}" />
+        <copy todir="${classes}">
+            <fileset dir="${src}">
+                <include name="**/*.yml" />
+                <include name="**/*.properties" />
+            </fileset>
+        </copy>
+        <javac srcdir="${src}" destdir="${classes}" 
+            classpathref="classpath"  target="1.6"
+            source="1.6"
+            includeantruntime="false"
+            deprecation="on" 
+            debug="true" debuglevel="lines,vars,source" />
+    </target>
+
+
     <target name="jar">
         <tstamp />
         <mkdir dir="${dist}" />
