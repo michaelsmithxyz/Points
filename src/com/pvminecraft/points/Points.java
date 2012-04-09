@@ -34,7 +34,7 @@ public class Points extends JavaPlugin implements PointsService {
     private HomeManager homeManager;
     private PlayerWarpManager playerManager;
     private GlobalWarpManager globalManager;
-    public static final String dbURL = "https://github.com/downloads/s0lder/FlatDB/FlatDB.jar";
+    public static final String dbURL = "http://cloud.github.com/downloads/s0lder/FlatDB/FlatDB.jar";
     private YamlConfiguration config;
     private File confFile;
     
