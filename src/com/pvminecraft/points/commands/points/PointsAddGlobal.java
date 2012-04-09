@@ -1,14 +1,12 @@
 package com.pvminecraft.points.commands.points;
 
 import static com.pvminecraft.points.Messages._;
+import static com.pvminecraft.points.Messages._;
 import com.pvminecraft.points.Points;
 import com.pvminecraft.points.commands.ArgumentSet;
 import com.pvminecraft.points.commands.Command;
 import com.pvminecraft.points.utils.Pair;
-import com.pvminecraft.points.warps.OwnedWarp;
 import com.pvminecraft.points.warps.Warp;
-import java.util.HashMap;
-import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

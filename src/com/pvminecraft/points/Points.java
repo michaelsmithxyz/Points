@@ -156,6 +156,12 @@ public class Points extends JavaPlugin implements PointsService {
                 ArgumentSet warpFind = new WarpFind(warpCommand, "find \\w+$", this, warpPerm);
                 warpCommand.addArgument(warpFind);
             }
+            if(Config.warpsInvites.getBoolean()) {
+                ArgumentSet warpInvite = new WarpInvite(warpCommand, "invite \\w+ \\w+$", this, warpPerm);
+                warpCommand.addArgument(warpInvite);
+                ArgumentSet warpAccept = new WarpAccept(warpCommand, "accept", this, warpPerm);
+                warpCommand.addArgument(warpAccept);
+            }
             commands.addCommand(warpCommand);
             getCommand("warp").setExecutor(commands);
         }

@@ -7,6 +7,7 @@ public enum Config {
     warpsSocial("features.warps.social", true),
     warpsGlobals("features.warps.globals", true),
     warpsCompass("features.warps.compass", true),
+    warpsInvites("features.warps.invites", true),
     
     spawnEnabled("features.spawn.enabled", true),
     spawnBed("features.spawn.bed", true),

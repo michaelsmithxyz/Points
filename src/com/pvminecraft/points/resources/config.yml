@@ -4,6 +4,7 @@ features:
         social: true
         globals: true
         compass: true
+        invites: true
     spawn:
         enabled: true
         bed: true
