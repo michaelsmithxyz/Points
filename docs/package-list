@@ -1,7 +1,9 @@
 com.pvminecraft.points
 com.pvminecraft.points.commands
 com.pvminecraft.points.commands.home
+com.pvminecraft.points.commands.points
 com.pvminecraft.points.commands.spawn
+com.pvminecraft.points.commands.warp
 com.pvminecraft.points.homes
 com.pvminecraft.points.utils
 com.pvminecraft.points.warps
