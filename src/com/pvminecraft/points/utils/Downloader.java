@@ -15,6 +15,27 @@ public class Downloader {
         }
     }
     
+    public static String getFile(String target) {
+        try {
+            return getFile(new URL(target));
+        } catch(MalformedURLException e) {
+            return null;
+        }
+    }
+    
+    public static String getFile(URL url) {
+        try {
+            int b;
+            InputStream in = url.openStream();
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            while((b = in.read()) != -1)
+                out.write(b);
+            return out.toString();
+        } catch(IOException e) {
+            return null;
+        }
+    }
+    
     public static boolean getFile(URL url, String dest) {
         try {
             ReadableByteChannel rbc = Channels.newChannel(url.openStream());

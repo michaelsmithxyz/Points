@@ -17,7 +17,6 @@ public class CommandHandler implements CommandExecutor {
     }
     
     public void addCommand(com.pvminecraft.points.commands.Command command) {
-        System.out.println("[Points] Adding command: " + command.getBase());
         this.cmds.add(command);
     }
 

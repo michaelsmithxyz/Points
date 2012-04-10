@@ -35,6 +35,7 @@ public class Points extends JavaPlugin implements PointsService {
     private PlayerWarpManager playerManager;
     private GlobalWarpManager globalManager;
     public static final String dbURL = "http://cloud.github.com/downloads/s0lder/FlatDB/FlatDB.jar";
+    public static final String vrsnURL = "http://bukget.org/api/plugin/points/latest";
     private YamlConfiguration config;
     private File confFile;
     
@@ -55,6 +56,7 @@ public class Points extends JavaPlugin implements PointsService {
         if(!getDataFolder().exists())
             getDataFolder().mkdirs();
         
+        checkVersion();
         setupConfig();
         
         ServicesManager sm = getServer().getServicesManager();
@@ -70,6 +72,34 @@ public class Points extends JavaPlugin implements PointsService {
         
         sm.register(PointsService.class, this, this, ServicePriority.Normal);
         System.out.println("[Points] Points is now active.");
+    }
+    
+    private void checkVersion() {
+        String metaData = Downloader.getFile(vrsnURL);
+        String[] lines;
+        String version = null;
+        if(metaData == null) {
+            System.out.println("[Points] Couldn't check for updates!");
+            return;
+        }
+        lines = metaData.split("\n");
+        for(int i = 0; i < lines.length; i++)
+            lines[i] = lines[i].trim();
+        for(String line : lines)
+            if(line.matches("\"name\": \"Points [\\.0-9A-z]+\","))
+                version = line; 
+        if(version == null) {
+            System.out.println("[Points] Couldn't check for updates!");
+            return;
+        }
+        version = version.replace("\"", "");
+        version = version.replace(",", "");
+        version = version.split(":")[1].trim();
+        version = version.split(" ")[1].substring(1);
+        if(version.compareTo(getDescription().getVersion()) > 0) {
+            System.out.println("[Points] A new version of Points (" + version + ") may be available.");
+            System.out.println("         Check http://dev.bukkit.org/server-mods/points");
+        }
     }
     
     private void setupConfig() {
