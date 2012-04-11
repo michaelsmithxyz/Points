@@ -56,8 +56,9 @@ public class Points extends JavaPlugin implements PointsService {
         if(!getDataFolder().exists())
             getDataFolder().mkdirs();
         
-        checkVersion();
         setupConfig();
+        if(Config.checkUpdates.getBoolean())
+            checkVersion();
         
         ServicesManager sm = getServer().getServicesManager();
         Messages.buildMessages();

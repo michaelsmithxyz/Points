@@ -1,3 +1,4 @@
+checkupdates: true
 features:
     warps:
         enabled: true
