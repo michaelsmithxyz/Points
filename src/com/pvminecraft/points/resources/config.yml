@@ -1,3 +1,4 @@
+debugging: false
 checkupdates: true
 features:
     warps:

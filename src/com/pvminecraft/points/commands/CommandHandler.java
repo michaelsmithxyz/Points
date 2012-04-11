@@ -1,5 +1,7 @@
 package com.pvminecraft.points.commands;
 
+import com.pvminecraft.points.log.Level;
+import com.pvminecraft.points.log.Stdout;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.command.Command;
@@ -18,6 +20,7 @@ public class CommandHandler implements CommandExecutor {
     
     public void addCommand(com.pvminecraft.points.commands.Command command) {
         this.cmds.add(command);
+        Stdout.println("Added command " + command.getBase(), Level.DEBUG);
     }
 
     @Override
@@ -27,7 +30,7 @@ public class CommandHandler implements CommandExecutor {
                 cmd.execute(cs, toFull(label, args), args);
                 return true;
             }
-        System.out.println("[Points] ERROR: No match for command: " + cmnd.getLabel());
+        Stdout.println("No match for command: " + cmnd.getLabel(), Level.DEBUG);
         return true;
     }
     

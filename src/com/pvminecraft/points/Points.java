@@ -13,6 +13,8 @@ import com.pvminecraft.points.commands.spawn.SpawnDefault;
 import com.pvminecraft.points.commands.spawn.SpawnSet;
 import com.pvminecraft.points.commands.warp.*;
 import com.pvminecraft.points.homes.HomeManager;
+import com.pvminecraft.points.log.Level;
+import com.pvminecraft.points.log.Stdout;
 import com.pvminecraft.points.utils.ClassPathAdder;
 import com.pvminecraft.points.utils.Downloader;
 import com.pvminecraft.points.warps.GlobalWarpManager;
@@ -49,7 +51,7 @@ public class Points extends JavaPlugin implements PointsService {
     @Override
     public void onEnable() {
         if(!checkLibs("lib/")) {
-            System.err.println("[Points] Could not download required libraries!");
+            Stdout.println("Could not download required libraries!", Level.ERROR);
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
@@ -72,7 +74,7 @@ public class Points extends JavaPlugin implements PointsService {
         setupCommands();
         
         sm.register(PointsService.class, this, this, ServicePriority.Normal);
-        System.out.println("[Points] Points is now active.");
+        Stdout.println("Points is now active", Level.MESSAGE);
     }
     
     private void checkVersion() {
@@ -80,7 +82,7 @@ public class Points extends JavaPlugin implements PointsService {
         String[] lines;
         String version = null;
         if(metaData == null) {
-            System.out.println("[Points] Couldn't check for updates!");
+            Stdout.println("Couldn't check for updates!", Level.ERROR);
             return;
         }
         lines = metaData.split("\n");
@@ -90,7 +92,7 @@ public class Points extends JavaPlugin implements PointsService {
             if(line.matches("\"name\": \"Points [\\.0-9A-z]+\","))
                 version = line; 
         if(version == null) {
-            System.out.println("[Points] Couldn't check for updates!");
+            Stdout.println("Couldn't check for updates!", Level.ERROR);
             return;
         }
         version = version.replace("\"", "");
@@ -98,8 +100,8 @@ public class Points extends JavaPlugin implements PointsService {
         version = version.split(":")[1].trim();
         version = version.split(" ")[1].substring(1);
         if(version.compareTo(getDescription().getVersion()) > 0) {
-            System.out.println("[Points] A new version of Points (" + version + ") may be available.");
-            System.out.println("         Check http://dev.bukkit.org/server-mods/points");
+            Stdout.println("A new version of Points (" + version + ") is available.", Level.MESSAGE);
+            Stdout.println("        Check http://dev.bukkit.org/server-mods/points", Level.NONE);
         }
     }
     
@@ -109,19 +111,19 @@ public class Points extends JavaPlugin implements PointsService {
             config = new YamlConfiguration();
             config.load(confFile.getPath());
             Config.load(config);
-            System.out.println("[Points] Loaded configuration");
+            Stdout.println("Loaded configuration", Level.MESSAGE);
         } catch(FileNotFoundException e) {
-            System.out.println("[Points] Couldn't find config.yml... Generating...");
+            Stdout.println("Couldn't find config.yml... Generating...", Level.MESSAGE);
             if(Downloader.copyFile(Points.class.getResourceAsStream("resources/config.yml"), confFile.getPath())) {
-                System.out.println("[Points] config.yml has been generated!");
+                Stdout.println("config.yml has been generated!", Level.MESSAGE);
                 setupConfig();
             } else {
-                System.out.println("[Points] Couldn't generate config.yml! Anything goes...");
+                Stdout.println("Couldn't generate config.yml! Anything goes...", Level.ERROR);
             }
         } catch(IOException e) {
-            System.err.println("[Points] Couldn't read config.yml! Anything goes...");
+            Stdout.println("Couldn't read config.yml! Anything goes...", Level.ERROR);
         } catch(InvalidConfigurationException e) {
-            System.err.println("[Points] Malformed configuration! Anything goes...");
+            Stdout.println("Malformed configuration! Anything goes...", Level.ERROR);
         }
     }
     
@@ -242,7 +244,7 @@ public class Points extends JavaPlugin implements PointsService {
         //Check for FlatDB.jar
         File jar = new File(dir, "FlatDB.jar");
         if(!jar.exists()){
-            System.out.println("[Points] Downloading FlatDB.jar");
+            Stdout.println("Downloading FlatDB.jar", Level.MESSAGE);
             boolean down = Downloader.getFile(dbURL, jar.getPath());
             boolean load = ClassPathAdder.addFile(jar);
             return down && load;

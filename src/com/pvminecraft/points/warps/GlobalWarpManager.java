@@ -3,6 +3,8 @@ package com.pvminecraft.points.warps;
 import com.pvminecraft.FlatDB.FlatDB;
 import com.pvminecraft.FlatDB.Row;
 import com.pvminecraft.points.Points;
+import com.pvminecraft.points.log.Level;
+import com.pvminecraft.points.log.Stdout;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Location;
@@ -86,7 +88,7 @@ public class GlobalWarpManager {
                 Warp warp = Warp.fromRow(row, plugin.getServer());
                 globals.add(warp);
             } catch (NullPointerException e) {
-                System.err.println("[Points] Error loading global: " + row.getIndex());
+                Stdout.println("Couldn't load global: " + row.getIndex(), Level.ERROR);
             }
         }
     }
@@ -98,7 +100,7 @@ public class GlobalWarpManager {
                 Row row = Warp.toRow(warp);
                 database.addRow(row);
             } catch(NullPointerException e) {
-                System.err.println("[Points] Error saving global: " + warp.getName());
+                Stdout.println("Couldn't save global: " + warp.getName(), Level.ERROR);
             }
         }
         cleanWarps(database, globals);

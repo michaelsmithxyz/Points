@@ -1,5 +1,7 @@
 package com.pvminecraft.points.commands;
 
+import com.pvminecraft.points.log.Level;
+import com.pvminecraft.points.log.Stdout;
 import java.util.LinkedList;
 import java.util.List;
 import org.bukkit.command.CommandSender;
@@ -44,6 +46,7 @@ public class Command {
         for(ArgumentSet arg : execs)
             if(arg.match(command))
                 return arg.execute(sender, command, args);
+        Stdout.println("Command \"" + command + "\" falling through to help", Level.DEBUG);
         return executeHelp(sender, args);
     }
     

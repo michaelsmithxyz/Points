@@ -3,6 +3,7 @@ package com.pvminecraft.points;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public enum Config {
+    debugging("debugging", false),
     checkUpdates("checkupdates", true),
     
     warpsEnabled("features.warps.enabled", true),

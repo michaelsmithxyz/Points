@@ -3,8 +3,9 @@ package com.pvminecraft.points.warps;
 import com.pvminecraft.FlatDB.FlatDB;
 import com.pvminecraft.FlatDB.Row;
 import com.pvminecraft.points.Points;
+import com.pvminecraft.points.log.Level;
+import com.pvminecraft.points.log.Stdout;
 import java.util.*;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class PlayerWarpManager {
@@ -118,7 +119,7 @@ public class PlayerWarpManager {
         for(Row r : playerRows) {
             player = r.getIndex();
             dbFile = r.getElement("db");
-            System.out.println("[Points] Loading Player: " + player);
+            Stdout.println("Loading Player: " + player, Level.DEBUG);
             loadPlayer(player, directory, dbFile);
         }
     }
@@ -142,8 +143,7 @@ public class PlayerWarpManager {
             try {
                 warp = OwnedWarp.fromRow(r, plugin.getServer(), player);
             } catch(NullPointerException e) {
-                System.err.println("[Points] Error Loading Warp "
-                        + player + "/" + r.getIndex());
+                Stdout.println("Couldn't Warp " + player + "/" + r.getIndex(), Level.ERROR);
                 continue;
             }
             playerWarps.add(warp);
@@ -169,7 +169,7 @@ public class PlayerWarpManager {
             try {
                 warpRow = OwnedWarp.toRow(w);
             } catch(NullPointerException e) {
-                System.err.println("[Points] Error saving warp " + name + "/" + w.getName());
+                Stdout.println("Couldn't save warp " + name + "/" + w.getName(), Level.ERROR);
                 continue;
             }
             warpsDB.addRow(warpRow);
