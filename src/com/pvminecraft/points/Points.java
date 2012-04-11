@@ -34,10 +34,12 @@ public class Points extends JavaPlugin implements PointsService {
     private HomeManager homeManager;
     private PlayerWarpManager playerManager;
     private GlobalWarpManager globalManager;
+    private YamlConfiguration config;
+    private File pointsConfig;
+    private File warpConfig;
+    
     public static final String dbURL = "http://cloud.github.com/downloads/s0lder/FlatDB/FlatDB.jar";
     public static final String vrsnURL = "http://bukget.org/api/plugin/points/latest";
-    private YamlConfiguration config;
-    private File confFile;
     
     @Override
     public void onDisable() {
@@ -48,6 +50,7 @@ public class Points extends JavaPlugin implements PointsService {
 
     @Override
     public void onEnable() {
+        this.warpConfig = new File(getDataFolder(), "warps.yml");
         if(!checkLibs("lib/")) {
             System.err.println("[Points] Could not download required libraries!");
             getServer().getPluginManager().disablePlugin(this);
@@ -63,7 +66,7 @@ public class Points extends JavaPlugin implements PointsService {
         ServicesManager sm = getServer().getServicesManager();
         Messages.buildMessages();
         homeManager = new HomeManager(this);
-        playerManager = new PlayerWarpManager(this);
+        playerManager = new PlayerWarpManager(this, this.warpConfig);
         globalManager = new GlobalWarpManager(this);
         
         homeManager.load();
@@ -105,14 +108,14 @@ public class Points extends JavaPlugin implements PointsService {
     
     private void setupConfig() {
         try {
-            confFile = new File(getDataFolder().getPath(), "config.yml");
+            pointsConfig = new File(getDataFolder().getPath(), "config.yml");
             config = new YamlConfiguration();
-            config.load(confFile.getPath());
+            config.load(pointsConfig.getPath());
             Config.load(config);
             System.out.println("[Points] Loaded configuration");
         } catch(FileNotFoundException e) {
             System.out.println("[Points] Couldn't find config.yml... Generating...");
-            if(Downloader.copyFile(Points.class.getResourceAsStream("resources/config.yml"), confFile.getPath())) {
+            if(Downloader.copyFile(Points.class.getResourceAsStream("resources/config.yml"), pointsConfig.getPath())) {
                 System.out.println("[Points] config.yml has been generated!");
                 setupConfig();
             } else {
