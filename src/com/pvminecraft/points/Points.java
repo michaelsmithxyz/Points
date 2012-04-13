@@ -22,9 +22,11 @@ import com.pvminecraft.points.warps.PlayerWarpManager;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.ServicePriority;
@@ -211,16 +213,19 @@ public class Points extends JavaPlugin implements PointsService {
         getCommand("points").setExecutor(commands);
     }
     
-    public static void teleportTo(Player pl, Location loc) {
+    public static void teleportTo(Entity entity, Location loc) {
+        Chunk chunk = loc.getChunk();
+        if(!chunk.isLoaded())
+            chunk.load();
         if(loc.getBlock().getTypeId() != 0) {
             Location locN = new Location(loc.getWorld(), loc.getX(), loc.getY() + 1, loc.getZ());
-            teleportTo(pl, locN);
+            if(locN.getY() > locN.getWorld().getMaxHeight())
+                return;
+            teleportTo(entity, locN);
         } else {
-            pl.teleport(loc);
+            entity.teleport(loc);
         }
     }
-    
-    //PointsService Implementation
     
     @Override
     public PlayerWarpManager getPlayerManager() {

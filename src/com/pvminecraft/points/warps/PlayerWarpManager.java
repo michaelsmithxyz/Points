@@ -109,7 +109,7 @@ public class PlayerWarpManager {
     public static void sendTo(Player player, OwnedWarp warp) {
         if(warp == null)
             return;
-        player.teleport(warp.getTarget());
+        Points.teleportTo(player, warp.getTarget());
     }
 
     public void load() {

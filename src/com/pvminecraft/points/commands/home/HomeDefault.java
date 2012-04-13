@@ -29,7 +29,7 @@ public class HomeDefault extends ArgumentSet {
         if(home == null)
             player.sendMessage(_("noHome"));
         else {
-            player.teleport(home);
+            Points.teleportTo(player, home);
             player.sendMessage(_("welcome"));
         }
         return true;

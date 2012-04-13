@@ -76,8 +76,9 @@ public class GlobalWarpManager {
      * @param warp the warp to be used as the target
      */
     public static void sendTo(Player player, Warp warp) {
-        Location target = warp.getTarget();
-        player.teleport(target);
+        if(warp == null)
+            return;
+        Points.teleportTo(player, warp.getTarget());
     }
 
     public void load() {

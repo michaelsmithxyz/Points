@@ -6,6 +6,7 @@ import com.pvminecraft.points.warps.PlayerWarpManager;
 import com.pvminecraft.points.warps.Warp;
 
 public interface PointsService {
+    
     /**
      * Returns the current warp manager in use for global warps.
      * Global warps operate with the {@link Warp} class.
