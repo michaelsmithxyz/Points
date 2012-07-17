@@ -1,4 +1,7 @@
-Points
+                                 Points
+
+NOTICE: This software is no longer maintained and is not guaranteed to work 
+        with recent versions of Bukkit!
 
 Points is a Bukkit Minecraft server plugin that provides /home, /spawn, and
 warp points functionality for users.
