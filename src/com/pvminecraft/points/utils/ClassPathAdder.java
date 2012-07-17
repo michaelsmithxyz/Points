@@ -6,6 +6,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+/*
+ * We use this to dynamically load FlatDB after download
+ */
 public class ClassPathAdder {
     public static final Class[] PARAMS = new Class[] {URL.class};
     
@@ -17,6 +20,7 @@ public class ClassPathAdder {
         }
     }
     
+    // URLs are the language of the ClassLoader
     public static boolean addURL(URL url) {
         try {
             URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();

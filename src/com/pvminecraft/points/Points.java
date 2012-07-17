@@ -34,12 +34,13 @@ import org.bukkit.plugin.ServicesManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Points extends JavaPlugin implements PointsService {
+    public static final String vrsnURL = "http://bukget.org/api/plugin/points/latest";
+    public static final String dbURL = "http://cloud.github.com/downloads/s0lder/FlatDB/FlatDB.jar";
+
     private CommandHandler commands;
     private HomeManager homeManager;
     private PlayerWarpManager playerManager;
     private GlobalWarpManager globalManager;
-    public static final String dbURL = "http://cloud.github.com/downloads/s0lder/FlatDB/FlatDB.jar";
-    public static final String vrsnURL = "http://bukget.org/api/plugin/points/latest";
     private YamlConfiguration config;
     private File confFile;
     
@@ -52,6 +53,7 @@ public class Points extends JavaPlugin implements PointsService {
 
     @Override
     public void onEnable() {
+        // lib/ is the default path for FlatDB
         if(!checkLibs("lib/")) {
             Stdout.println("Could not download required libraries!", Level.ERROR);
             getServer().getPluginManager().disablePlugin(this);
@@ -75,6 +77,7 @@ public class Points extends JavaPlugin implements PointsService {
         globalManager.load();
         setupCommands();
         
+        // Register the API with Services so other plugins can see us
         sm.register(PointsService.class, this, this, ServicePriority.Normal);
         Stdout.println("Points is now active", Level.MESSAGE);
     }
@@ -87,6 +90,7 @@ public class Points extends JavaPlugin implements PointsService {
             Stdout.println("Couldn't check for updates!", Level.ERROR);
             return;
         }
+        // Extremely crappy JSON parsing to get the version number. Don't mind me
         lines = metaData.split("\n");
         for(int i = 0; i < lines.length; i++)
             lines[i] = lines[i].trim();
@@ -116,6 +120,7 @@ public class Points extends JavaPlugin implements PointsService {
             Stdout.println("Loaded configuration", Level.MESSAGE);
         } catch(FileNotFoundException e) {
             Stdout.println("Couldn't find config.yml... Generating...", Level.MESSAGE);
+            // Copy the default config over from the JAR
             if(Downloader.copyFile(Points.class.getResourceAsStream("resources/config.yml"), confFile.getPath())) {
                 Stdout.println("config.yml has been generated!", Level.MESSAGE);
                 setupConfig();
@@ -130,6 +135,9 @@ public class Points extends JavaPlugin implements PointsService {
     }
     
     private void setupCommands() {
+        // Each command is set up individually in order to support the config.
+        // This also provides some degree of a safety net if something goes
+        // wrong.
         commands = new CommandHandler(this);
         if(Config.spawnEnabled.getBoolean()) {
             Command spawnCommand = new Command("spawn", this);
@@ -213,6 +221,8 @@ public class Points extends JavaPlugin implements PointsService {
         getCommand("points").setExecutor(commands);
     }
     
+    // This exists to support chunk preloading and to avoid teleporting
+    // people into the ground.
     public static void teleportTo(Entity entity, Location loc) {
         Chunk chunk = loc.getChunk();
         if(!chunk.isLoaded())

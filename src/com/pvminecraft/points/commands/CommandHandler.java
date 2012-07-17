@@ -9,6 +9,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/*
+ * Delegates resonsibility to all commands. Generally there is one
+ * instance per plugin.
+ */
 public class CommandHandler implements CommandExecutor {
     private JavaPlugin plugin;
     private List<com.pvminecraft.points.commands.Command> cmds;

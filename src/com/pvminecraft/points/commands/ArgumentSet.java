@@ -7,6 +7,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/*
+ * Represents one specific set of possible arguments to a command.
+ * Usually, this disinguished sub-commands and can be used to enforce
+ * an expected number of variable parameters.
+ */
 public abstract class ArgumentSet {
     protected Pattern pattern;
     protected String regex;
@@ -14,6 +19,8 @@ public abstract class ArgumentSet {
     protected Command base;
     protected JavaPlugin plugin;
     
+    // Regex (pat) is used to match the set. \\w+ represents any old word which
+    // is your parameters usually.
     public ArgumentSet(Command base, String pat, JavaPlugin plugin, Permission ... perms)
             throws PatternSyntaxException {
         this.base = base;
@@ -55,5 +62,7 @@ public abstract class ArgumentSet {
     
     public abstract boolean execute(CommandSender sender, String command, String[] args);
     
+    // Key value pairs for command and description. Automatically compiled
+    // when help is called.
     public abstract Pair<String, String> getHelp();
 }

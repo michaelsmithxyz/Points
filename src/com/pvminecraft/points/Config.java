@@ -3,6 +3,7 @@ package com.pvminecraft.points;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public enum Config {
+    // Define default values for *all* config options
     debugging("debugging", false),
     checkUpdates("checkupdates", true),
     

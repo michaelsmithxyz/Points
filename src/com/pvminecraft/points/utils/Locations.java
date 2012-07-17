@@ -5,6 +5,9 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
 
+/*
+ * Routines used to convert Points internal notation to FlatDB
+ */
 public class Locations {
     public static Location fromRow(Row row, Server server) {
         String world = row.getElement("world"),

@@ -8,6 +8,7 @@ public class OwnedWarp extends Warp {
     private String owner;
     private boolean visible = false;
     
+    // DO NOT USE THIS
     protected OwnedWarp(Location location, String name) {
         super(location, name);
     }

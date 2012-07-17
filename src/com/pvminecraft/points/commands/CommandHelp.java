@@ -29,6 +29,7 @@ public class CommandHelp {
         return entries.size() > 0;
     }
     
+    // Generate help message
     public void displayHelp(CommandSender sender, int page) {
         if(entries.isEmpty()) return;
         int numPages = (int) Math.ceil((double) entries.size() / (double) ITEMS_PER_PAGE);

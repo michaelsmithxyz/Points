@@ -7,9 +7,16 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Properties;
 
+/*
+ * This class handles all prebaked messages displayed by Points.
+ * They are all stored in the JAR in a .properties file.
+ */
+
 public class Messages {
+
     private static HashMap<String, MessageFormat> messages;
 
+    // The name _ is just for the sake of space
     public static String _(String message, Object... arr) {
         if(messages == null)
             buildMessages();

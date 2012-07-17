@@ -1,21 +1,21 @@
 package com.pvminecraft.points.homes;
 
-import com.pvminecraft.FlatDB.FlatDB;
-import com.pvminecraft.FlatDB.Row;
 import com.pvminecraft.points.Points;
-import com.pvminecraft.points.utils.Locations;
+import com.pvminecraft.points.storage.Database;
+import com.pvminecraft.points.storage.YamlDatabase;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Set;
 import org.bukkit.Location;
 
 public class HomeManager {
     private Points plugin;
-    private String directory;
+    private File database;
     private HashMap<String, Location> homes;
 
-    public HomeManager(Points instance) {
+    public HomeManager(Points instance, File db) {
+        this.database = db;
         this.plugin = instance;
-        this.directory = plugin.getDataFolder().getPath();
         this.homes = new HashMap<String, Location>();
     }
     
@@ -37,8 +37,7 @@ public class HomeManager {
     }
     
     public void load() {
-        FlatDB db = new FlatDB(directory, "homes.db");
-        for(Row row : db.getAll())
-            homes.put(row.getIndex(), Locations.fromRow(row, plugin.getServer()));
+        Database db = new YamlDatabase();
+        db.load(database);
     }
 }

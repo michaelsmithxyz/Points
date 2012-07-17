@@ -7,6 +7,10 @@ import java.util.List;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/*
+ * Represents an actual base command. Houses ArgumentSets and help routines
+ */
+
 public class Command {
     private String base;
     private String pattern;
@@ -39,6 +43,7 @@ public class Command {
         return help != null && help.hasEntries();
     }
     
+    // Selects using regex amongst the ArgumentSets
     public boolean execute(CommandSender sender, String command, String[] args) {
         // Special Case for help and ?
         if(args.length > 0 && (args[0].equalsIgnoreCase("?") || args[0].equalsIgnoreCase("help")))
@@ -50,6 +55,7 @@ public class Command {
         return executeHelp(sender, args);
     }
     
+    // Generate help
     public boolean executeHelp(CommandSender sender, String[] args) {
         if(!hasHelp()) return false;
         if(args.length > 1) {
